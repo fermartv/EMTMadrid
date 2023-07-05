@@ -1,13 +1,15 @@
 """Tests for the EMT Madrid wrapper."""
 
+from unittest.mock import Mock, patch
+
 import pytest
 
 from emt_madrid import emt_madrid
-from unittest.mock import Mock, patch
 
 VALID_LOGIN = {
     "code": "01",
-    "description": "Token 3bd5855a-ed3d-41d5-8b4b-182726f86031 extend into control-cache Data recovered OK",
+    "description": 
+        "Token 3bd5855a-ed3d-41d5-8b4b-182726f86031 extend into control-cache Data recovered OK",
     "datetime": "2023-06-29T19:50:08.307475",
     "data": [
         {

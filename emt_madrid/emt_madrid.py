@@ -48,8 +48,8 @@ class APIEMT:
                 _LOGGER.error("Invalid email or password")
                 return "Invalid token"
             return response["data"][0]["accessToken"]
-        except (KeyError, IndexError) as e:
-            raise ValueError("Unable to get token from the API") from e
+        except (KeyError, IndexError) as error:
+            raise ValueError("Unable to get token from the API") from error
 
     def update_stop_info(self, stop_id):
         """Update all the lines and information from the bus stop."""
@@ -184,5 +184,5 @@ class APIEMT:
             response = requests.request(method, **kwargs)
             response.raise_for_status()
             return response.json()
-        except requests.HTTPError as e:
-            raise requests.HTTPError(f"Error while connecting to EMT API: {e}") from e
+        except requests.HTTPError as error:
+            raise requests.HTTPError(f"Error while connecting to EMT API: {error}") from error

@@ -1,1 +1,2 @@
 requests==23.1.2
+pytest==7.4.0
