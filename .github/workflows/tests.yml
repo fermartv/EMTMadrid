@@ -1,4 +1,4 @@
-name: Pylint
+name: Python tests
 
 on: [push]
 
