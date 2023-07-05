@@ -23,5 +23,6 @@ jobs:
     - name: Analysing the code with pylint
       run: |
         pylint $(git ls-files '*.py')
-        pytest test_emt_madrid.py
-
+    - name: Running tests
+      run: |
+        pytest ./tests

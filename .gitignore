@@ -170,3 +170,4 @@ cython_debug/
 
 # Local testing
 secrets.py
+notes

@@ -16,26 +16,30 @@ _LOGGER = logging.getLogger(__name__)
 
 
 class APIEMT:
-    """A class representing an API client for EMT (Empresa Municipal de Transportes) services.
+    """A class representing an API client for EMT services.
 
-    This class provides methods to authenticate with the EMT API, retrieve bus stop information,
-    update arrival times, and access the retrieved data.
+    This class provides methods to authenticate with the EMT API,
+    retrieve bus stop information, update arrival times,
+    and access the retrieved data.
     """
 
-    def __init__(self) -> None:
+    def __init__(self, email, password, stop_id) -> None:
         """Initialize an instance of the APIEMT class."""
+        self._email = email
+        self._password = password
+        self._stop_id = stop_id
         self._token = None
         self._stop_info = {
-            "bus_stop_id": None,
+            "bus_stop_id": self._stop_id,
             "bus_stop_name": None,
             "bus_stop_coordinates": None,
             "bus_stop_address": None,
             "lines": {},
         }
 
-    def authenticate(self, user, password):
+    def authenticate(self):
         """Authenticate the user using the provided credentials."""
-        headers = {"email": user, "password": password}
+        headers = {"email": self._email, "password": self._password}
         url = f"{BASE_URL}{ENDPOINT_LOGIN}"
         response = self._make_request(url, headers=headers, method="GET")
         self._token = self._extract_token(response)
@@ -51,14 +55,14 @@ class APIEMT:
         except (KeyError, IndexError) as error:
             raise ValueError("Unable to get token from the API") from error
 
-    def update_stop_info(self, stop_id):
+    def update_stop_info(self):
         """Update all the lines and information from the bus stop."""
-        url = f"{BASE_URL}{ENDPOINT_STOP_INFO}{stop_id}/detail/"
+        url = f"{BASE_URL}{ENDPOINT_STOP_INFO}{self._stop_id}/detail/"
         headers = {"accessToken": self._token}
-        data = {"idStop": stop_id}
+        data = {"idStop": self._stop_id}
         if self._token != "Invalid token":
             response = self._make_request(url, headers=headers, data=data, method="GET")
-            self._parse_stop_info(response, stop_id)
+            self._parse_stop_info(response)
 
     def get_stop_info(
         self,
@@ -66,7 +70,7 @@ class APIEMT:
         """Retrieve all the information from the bus stop."""
         return self._stop_info
 
-    def _parse_stop_info(self, response, stop_id):
+    def _parse_stop_info(self, response):
         """Parse the stop info from the API response."""
         try:
             if response.get("code") != "00":
@@ -75,7 +79,6 @@ class APIEMT:
                 stop_info = response["data"][0]["stops"][0]
                 self._stop_info.update(
                     {
-                        "bus_stop_id": stop_id,
                         "bus_stop_name": stop_info["name"],
                         "bus_stop_coordinates": stop_info["geometry"]["coordinates"],
                         "bus_stop_address": stop_info["postalAddress"],
@@ -107,11 +110,11 @@ class APIEMT:
             }
         return line_info
 
-    def update_arrival_times(self, stop):
+    def update_arrival_times(self):
         """Update the arrival times for the specified bus stop and line."""
-        url = f"{BASE_URL}{ENDPOINT_ARRIVAL_TIME}{stop}/arrives/"
+        url = f"{BASE_URL}{ENDPOINT_ARRIVAL_TIME}{self._stop_id}/arrives/"
         headers = {"accessToken": self._token}
-        data = {"stopId": stop, "Text_EstimationsRequired_YN": "Y"}
+        data = {"stopId": self._stop_id, "Text_EstimationsRequired_YN": "Y"}
         if self._token != "Invalid token":
             response = self._make_request(
                 url, headers=headers, data=data, method="POST"
@@ -185,4 +188,6 @@ class APIEMT:
             response.raise_for_status()
             return response.json()
         except requests.HTTPError as error:
-            raise requests.HTTPError(f"Error while connecting to EMT API: {error}") from error
+            raise requests.HTTPError(
+                f"Error while connecting to EMT API: {error}"
+            ) from error
