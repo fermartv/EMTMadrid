@@ -23,5 +23,5 @@ jobs:
     - name: Analysing the code with pylint
       run: |
         pylint $(git ls-files '*.py')
-        pytest -m test_emt_madrid.py
+        pytest test_emt_madrid.py
 
