@@ -1,7 +1,7 @@
 """Support for EMT Madrid API to get bus stop and route information."""
 
 import logging
-from typing import Any
+from typing import Any, Optional
 
 import aiohttp
 import async_timeout
@@ -94,7 +94,7 @@ class EMTAPIWrapper:
         _LOGGER.warning("Error %s. Failed to get data from %s", response.status, url)
         return None
 
-    async def get_stop_info(self, stop_id: int | None = None) -> dict[str, Any]:
+    async def get_stop_info(self, stop_id: Optional[int] = None) -> dict[str, Any]:
         """Get information about a bus stop."""
         stop_id = self._stop_id if stop_id is None else stop_id
         endpoint = f"v1/transport/busemtmad/stops/{stop_id}/detail/"
