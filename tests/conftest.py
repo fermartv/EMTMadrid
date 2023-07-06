@@ -2,7 +2,7 @@
 
 import json
 import pathlib
-from typing import Any
+from typing import Any, Dict
 
 TEST_EXAMPLES_PATH = pathlib.Path(__file__).parent / "response_examples"
 
@@ -43,7 +43,7 @@ class MockAsyncSession:
         """Dumb await."""
         return self._raw_response
 
-    async def get(self, url: str, headers: dict[str, Any], *_args, **_kwargs):
+    async def get(self, url: str, headers: Dict[str, Any], *_args, **_kwargs):
         """Dumb await."""
         if self.exc:
             raise self.exc

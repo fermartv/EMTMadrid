@@ -1,7 +1,7 @@
 """Support for EMT Madrid API to get bus stop and route information."""
 
 import logging
-from typing import Any, Optional
+from typing import Any, Dict, Optional
 
 import aiohttp
 import async_timeout
@@ -64,7 +64,7 @@ class EMTAPIWrapper:
             _LOGGER.warning("Client error in '%s' -> %s", url, exc)
         return None
 
-    def _parse_token(self, response: dict[str, Any]) -> str:
+    def _parse_token(self, response: Dict[str, Any]) -> str:
         """Parse the response from the authentication endpoint."""
         if response.get("code") == "01":
             return response["data"][0].get("accessToken")
@@ -73,8 +73,8 @@ class EMTAPIWrapper:
         return None
 
     async def _get_data(
-        self, url: str, headers: dict[str, Any], method: str
-    ) -> dict[str, Any]:
+        self, url: str, headers: Dict[str, Any], method: str
+    ) -> Dict[str, Any]:
         """Get data from the EMT API."""
         assert self._session is not None
         async with async_timeout.timeout(DEFAULT_TIMEOUT):
@@ -94,7 +94,7 @@ class EMTAPIWrapper:
         _LOGGER.warning("Error %s. Failed to get data from %s", response.status, url)
         return None
 
-    async def get_stop_info(self, stop_id: Optional[int] = None) -> dict[str, Any]:
+    async def get_stop_info(self, stop_id: Optional[int] = None) -> Dict[str, Any]:
         """Get information about a bus stop."""
         stop_id = self._stop_id if stop_id is None else stop_id
         endpoint = f"v1/transport/busemtmad/stops/{stop_id}/detail/"
