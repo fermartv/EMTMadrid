@@ -1,0 +1,22 @@
+{
+    "code": "01",
+    "description": "Register user: yourusername with token: 3bd5855a-ed3d-41d5-8b4b-182726f86031 ",
+    "datetime": "2019-10-01T16:35:39.521302",
+    "data": [
+        {
+            "updatedAt": "2019-05-08T07:23:40.7500000",
+            "userName": "yourusername",
+            "accessToken": "3bd5855a-ed3d-41d5-8b4b-182726f86031",
+            "tokenSecExpiration": 984,
+            "email": "yourmail@mail.com",
+            "idUser": "2f104b08-f8bf-4199-a4bc-c6ecc42ad6ba",
+            "apiCounter": {
+                "current": 5,
+                "dailyUse": 150000,
+                "owner": 0,
+                "licenceUse": "Please mention EMT Madrid MobilityLabs as data source. Thank you and enjoy!",
+                "aboutUses": "Important announcement! On November 30, 2019, your permitted use of this API will be 20.000 hits. To increase up to 150,000 hits, please, register your App or Website in Mobilitylabs and use your own X-ClientId and  X-ApiKey instead of generic login. It is free cost (more info in https://mobilitylabs.emtmadrid.es/doc/new-app and https://apidocs.emtmadrid.es/#api-Block_1_User_identity-login)"
+            }
+        }
+    ]
+}

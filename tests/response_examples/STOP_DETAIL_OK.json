@@ -1,0 +1,170 @@
+{
+    "code": "00",
+    "description": "Data recovered  OK, (lapsed: 573 millsecs)",
+    "datetime": "2023-07-06T19:06:14.429966",
+    "data": [
+      {
+        "stops": [
+          {
+            "stop": "72",
+            "name": "Cibeles-Casa de América",
+            "postalAddress": "Pº de Recoletos, 2 (Pza. de Cibeles)",
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                -3.69214452424823,
+                40.4203613685499
+              ]
+            },
+            "pmv": "60996",
+            "dataLine": [
+              {
+                "line": "005",
+                "label": "5",
+                "direction": "B",
+                "maxFreq": "18",
+                "minFreq": "11",
+                "headerA": "SOL/SEVILLA",
+                "headerB": "CHAMARTIN",
+                "startTime": "06:30",
+                "stopTime": "22:58",
+                "dayType": "LA"
+              },
+              {
+                "line": "014",
+                "label": "14",
+                "direction": "B",
+                "maxFreq": "17",
+                "minFreq": "6",
+                "headerA": "CONDE DE CASAL",
+                "headerB": "PIO XII",
+                "startTime": "06:20",
+                "stopTime": "23:38",
+                "dayType": "LA"
+              },
+              {
+                "line": "027",
+                "label": "27",
+                "direction": "B",
+                "maxFreq": "11",
+                "minFreq": "3",
+                "headerA": "EMBAJADORES",
+                "headerB": "PLAZA CASTILLA",
+                "startTime": "05:35",
+                "stopTime": "00:01",
+                "dayType": "LA"
+              },
+              {
+                "line": "037",
+                "label": "37",
+                "direction": "A",
+                "maxFreq": "20",
+                "minFreq": "10",
+                "headerA": "CUATRO CAMINOS",
+                "headerB": "PUENTE VALLECAS",
+                "startTime": "06:00",
+                "stopTime": "23:30",
+                "dayType": "LA"
+              },
+              {
+                "line": "045",
+                "label": "45",
+                "direction": "B",
+                "maxFreq": "18",
+                "minFreq": "8",
+                "headerA": "LEGAZPI",
+                "headerB": "REINA VICTORIA",
+                "startTime": "05:30",
+                "stopTime": "23:30",
+                "dayType": "LA"
+              },
+              {
+                "line": "053",
+                "label": "53",
+                "direction": "B",
+                "maxFreq": "20",
+                "minFreq": "9",
+                "headerA": "SOL/SEVILLA",
+                "headerB": "ARTURO SORIA",
+                "startTime": "05:50",
+                "stopTime": "22:55",
+                "dayType": "LA"
+              },
+              {
+                "line": "150",
+                "label": "150",
+                "direction": "B",
+                "maxFreq": "24",
+                "minFreq": "8",
+                "headerA": "SOL/SEVILLA",
+                "headerB": "VIRGEN CORTIJO",
+                "startTime": "05:55",
+                "stopTime": "22:45",
+                "dayType": "LA"
+              },
+              {
+                "line": "363",
+                "label": "C03",
+                "direction": "B",
+                "maxFreq": "20",
+                "minFreq": "10",
+                "headerA": "PUERTA TOLEDO",
+                "headerB": "ARGÜELLES",
+                "startTime": "07:00",
+                "stopTime": "23:00",
+                "dayType": "LA"
+              },
+              {
+                "line": "522",
+                "label": "N22",
+                "direction": "B",
+                "maxFreq": "60",
+                "minFreq": "35",
+                "headerA": "CIBELES",
+                "headerB": "BARRIO DEL PILAR",
+                "startTime": "23:40",
+                "stopTime": "05:50",
+                "dayType": "LA"
+              },
+              {
+                "line": "524",
+                "label": "N24",
+                "direction": "B",
+                "maxFreq": "60",
+                "minFreq": "35",
+                "headerA": "CIBELES",
+                "headerB": "LAS TABLAS",
+                "startTime": "23:40",
+                "stopTime": "05:50",
+                "dayType": "LA"
+              },
+              {
+                "line": "525",
+                "label": "N25",
+                "direction": "A",
+                "maxFreq": "60",
+                "minFreq": "35",
+                "headerA": "ALONSO MARTINEZ",
+                "headerB": "VILLA VALLECAS",
+                "startTime": "00:00",
+                "stopTime": "05:10",
+                "dayType": "LA"
+              },
+              {
+                "line": "526",
+                "label": "N26",
+                "direction": "A",
+                "maxFreq": "60",
+                "minFreq": "35",
+                "headerA": "ALONSO MARTINEZ",
+                "headerB": "ALUCHE",
+                "startTime": "00:00",
+                "stopTime": "05:10",
+                "dayType": "LA"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }

@@ -169,5 +169,5 @@ cython_debug/
 *.vsix
 
 # Local testing
-secrets.py
+user_tests.py
 notes
