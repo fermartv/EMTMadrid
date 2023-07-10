@@ -168,6 +168,9 @@ cython_debug/
 # Built Visual Studio Code Extensions
 *.vsix
 
+# Local OS
+.DS_Store
+
 # Local testing
 user_tests.py
 notes
