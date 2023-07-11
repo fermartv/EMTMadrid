@@ -16,6 +16,19 @@ _FIXTURE_STOP_ARRIVAL_OK = "STOP_ARRIVAL_OK.json"
 _FIXTURE_STOP_ARRIVAL_INVALID_STOP = "STOP_ARRIVAL_INVALID_STOP.json"
 _FIXTURE_STOP_ARRIVAL_INVALID_TOKEN = "STOP_ARRIVAL_INVALID_TOKEN.json"
 
+PRE_LOADED_STOP_INFO = {
+    "lines": {
+        "27": {
+            "distance": [],
+            "arrivals": [],
+        },
+        "53": {
+            "distance": [],
+            "arrivals": [],
+        },
+    },
+}
+
 
 class MockAsyncSession:
     """Mock GET requests to esios API."""

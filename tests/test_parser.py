@@ -6,7 +6,7 @@ import logging
 import pytest
 
 from emt_madrid import EMTAPIWrapper
-from tests.conftest import MockAsyncSession
+from tests.conftest import PRE_LOADED_STOP_INFO, MockAsyncSession
 
 
 @pytest.mark.parametrize(
@@ -83,30 +83,16 @@ async def test_parse_stop(
             assert len(line.get("arrivals")) == 0
 
 
-pre_loaded_stop_info = {
-    "lines": {
-        "27": {
-            "distance": [],
-            "arrivals": [],
-        },
-        "53": {
-            "distance": [],
-            "arrivals": [],
-        },
-    },
-}
-
-
 @pytest.mark.parametrize(
     "token, stop_id, stop_info, num_log_msgs",
     (
         ("token", "72", {}, 0),
-        ("token", "72", pre_loaded_stop_info, 0),
-        ("token", "invalid_stop_id", pre_loaded_stop_info, 1),
+        ("token", "72", PRE_LOADED_STOP_INFO, 0),
+        ("token", "invalid_stop_id", PRE_LOADED_STOP_INFO, 1),
         ("token", "invalid_stop_id", {}, 1),
         ("invalid_token", "72", {}, 1),
-        ("invalid_token", "72", pre_loaded_stop_info, 1),
-        ("invalid_token", "invalid_stop_id", pre_loaded_stop_info, 1),
+        ("invalid_token", "72", PRE_LOADED_STOP_INFO, 1),
+        ("invalid_token", "invalid_stop_id", PRE_LOADED_STOP_INFO, 1),
         ("invalid_token", "invalid_stop_id", {}, 1),
     ),
 )
@@ -114,7 +100,7 @@ pre_loaded_stop_info = {
 async def test_parse_arrivals(
     token, stop_id, stop_info, num_log_msgs, caplog, mocker
 ):  # pylint: disable=too-many-arguments
-    """Test authentication throws an HTTP error."""
+    """Test parse_arrivals function."""
 
     mock_session = MockAsyncSession()
     with caplog.at_level(logging.WARNING):

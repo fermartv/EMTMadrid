@@ -8,7 +8,7 @@ import pytest
 from aiohttp import ClientError
 
 from emt_madrid import EMTAPIWrapper
-from tests.conftest import MockAsyncSession
+from tests.conftest import PRE_LOADED_STOP_INFO, MockAsyncSession
 
 
 @pytest.mark.parametrize(
@@ -62,26 +62,12 @@ async def test_update_stop_info(
         assert mock_session.call_count == call_count
 
 
-pre_loaded_stop_info = {
-    "lines": {
-        "27": {
-            "distance": [],
-            "arrivals": [],
-        },
-        "53": {
-            "distance": [],
-            "arrivals": [],
-        },
-    },
-}
-
-
 @pytest.mark.parametrize(
     "token, stop_info, status, exception, num_log_msgs, call_count",
     (
         ("token", {}, 200, None, 0, 2),
-        ("token", pre_loaded_stop_info, 200, None, 0, 1),
-        ("invalid_token", pre_loaded_stop_info, 200, None, 1, 2),
+        ("token", PRE_LOADED_STOP_INFO, 200, None, 0, 1),
+        ("invalid_token", PRE_LOADED_STOP_INFO, 200, None, 1, 2),
         ("invalid_token", {}, 200, None, 1, 3),
         ("token", {}, 500, None, 1, 1),
         ("token", {}, 200, asyncio.TimeoutError, 1, 1),
