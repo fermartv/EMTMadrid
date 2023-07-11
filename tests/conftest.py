@@ -2,7 +2,7 @@
 
 import json
 import pathlib
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 TEST_EXAMPLES_PATH = pathlib.Path(__file__).parent / "response_examples"
 
@@ -22,19 +22,10 @@ class MockAsyncSession:
 
     status: int = 200
     _counter: int = 0
-    _raw_response = None
-
-    def __aenter__(self):
-        """Return the async session as a context manager."""
-        return self
+    _raw_response: Optional[Dict[str, Any]] = None
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         """Handle any exceptions raised within the context of the async session."""
-
-    def __await__(self):
-        """Allow the async session to be used with await statements."""
-        yield
-        return self
 
     async def close(self, *_args):
         """Close the session asynchronously."""
@@ -51,6 +42,7 @@ class MockAsyncSession:
 
     async def get(self, url: str, headers: Dict[str, Any], *_args, **_kwargs):
         """Dumb get method."""
+        self._counter += 1
         if self.exc:
             raise self.exc
         if "user/login/" in url:
@@ -62,9 +54,13 @@ class MockAsyncSession:
                 self._raw_response = load_fixture(_FIXTURE_LOGIN_OK)
 
         elif "stops" in url and "detail" in url:
-            if headers["accessToken"] == "invalid_token":
+            stop_id = url.split("/")[-3]
+            if (
+                headers["accessToken"] == "invalid_token"
+                or headers["accessToken"] is None
+            ):
                 self._raw_response = load_fixture(_FIXTURE_STOP_DETAIL_INVALID_TOKEN)
-            elif url.split("/")[-3] == "invalid_stop_id":
+            elif stop_id in ("invalid_stop_id", "None"):
                 self._raw_response = load_fixture(_FIXTURE_STOP_DETAIL_INVALID_STOP)
             else:
                 self._raw_response = load_fixture(_FIXTURE_STOP_DETAIL_OK)
@@ -72,6 +68,7 @@ class MockAsyncSession:
 
     async def post(self, url: str, headers: Dict[str, Any], *_args, **_kwargs):
         """Dumb post method."""
+        self._counter += 1
         if self.exc:
             raise self.exc
         if "stops" in url and "arrives" in url:
@@ -83,6 +80,11 @@ class MockAsyncSession:
                 self._raw_response = load_fixture(_FIXTURE_STOP_ARRIVAL_OK)
 
         return self
+
+    @property
+    def call_count(self) -> int:
+        """Return call counter."""
+        return self._counter
 
 
 def load_fixture(filename: str):
