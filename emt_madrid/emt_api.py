@@ -46,8 +46,7 @@ class EMTAPIWrapper:
         assert session is not None, "Session must not be None"
 
         self._session = session
-        self._email = email
-        self._password = password
+        self._credentials = {"email": email, "password": password}
         self._stop_id = stop_id
         self._token = None
         self._base_url = BASE_URL
@@ -58,6 +57,8 @@ class EMTAPIWrapper:
             "stop_address": None,
             "lines": {},
         }
+
+        self._update_semaphore = asyncio.Semaphore(1)
 
     async def _get_data(
         self,
@@ -99,7 +100,9 @@ class EMTAPIWrapper:
     async def authenticate(self) -> str:
         """Perform login to obtain the authentication token."""
         endpoint = "v1/mobilitylabs/user/login/"
-        headers = {"email": self._email, "password": self._password}
+        email = self._credentials.get("email")
+        password = self._credentials.get("password")
+        headers = {"email": email, "password": password}
         url = self._base_url + endpoint
 
         try:
@@ -139,7 +142,8 @@ class EMTAPIWrapper:
                 await self.authenticate()
                 return None
 
-            self._stop_info = parsed_stop_info
+            async with self._update_semaphore:
+                self._stop_info = parsed_stop_info
 
         except asyncio.TimeoutError:
             _LOGGER.warning("Timeout error fetching data from %s", url)
@@ -175,7 +179,8 @@ class EMTAPIWrapper:
                 await self.authenticate()
                 return None
 
-            self._stop_info = parsed_arrivals
+            async with self._update_semaphore:
+                self._stop_info = parsed_arrivals
 
         except asyncio.TimeoutError:
             _LOGGER.warning("Timeout error fetching data from %s", url)
