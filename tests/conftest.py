@@ -37,11 +37,17 @@ class MockAsyncSession:
     _counter: int = 0
     _raw_response: Optional[Dict[str, Any]] = None
 
+    def __aenter__(self):
+        """Return the async session as a context manager."""
+        return self
+
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         """Handle any exceptions raised within the context of the async session."""
 
-    async def close(self, *_args):
-        """Close the session asynchronously."""
+    def __await__(self):
+        """Allow the async session to be used with await statements."""
+        yield
+        return self
 
     def __init__(self, status=200, exc=None):
         """Set up desired mock response."""
