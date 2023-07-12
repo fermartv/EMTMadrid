@@ -63,7 +63,7 @@ class EMTAPIWrapper:
     async def _get_data(
         self,
         url: str,
-        headers: Dict[str, Any],
+        headers: Dict[str, str],
         method: str,
         data: Dict[str, Any] = None,
     ) -> Dict[str, Any]:
