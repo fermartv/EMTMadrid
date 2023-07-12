@@ -16,7 +16,7 @@ _FIXTURE_STOP_ARRIVAL_OK = "STOP_ARRIVAL_OK.json"
 _FIXTURE_STOP_ARRIVAL_INVALID_STOP = "STOP_ARRIVAL_INVALID_STOP.json"
 _FIXTURE_STOP_ARRIVAL_INVALID_TOKEN = "STOP_ARRIVAL_INVALID_TOKEN.json"
 
-PRE_LOADED_STOP_INFO = {
+PRE_LOADED_STOP_INFO: Dict[str, Any] = {
     "lines": {
         "27": {
             "distance": [],
@@ -109,3 +109,19 @@ class MockAsyncSession:
 def load_fixture(filename: str):
     """Load stored example for EMT API response."""
     return json.loads((TEST_EXAMPLES_PATH / filename).read_text())
+
+
+def check_stop_info(stop_info, distance=0, arrivals=0):
+    """Verify that the stop_info is correct."""
+    lines = stop_info.get("lines")
+    assert len(lines) == 12
+    line = lines.get("27")
+    assert line.get("destination") == "PLAZA CASTILLA"
+    assert line.get("origin") == "EMBAJADORES"
+    assert line.get("max_freq") == 11
+    assert line.get("min_freq") == 3
+    assert line.get("start_time") == "05:35"
+    assert line.get("end_time") == "00:01"
+    assert line.get("day_type") == "LA"
+    assert len(line.get("distance")) == distance
+    assert len(line.get("arrivals")) == arrivals

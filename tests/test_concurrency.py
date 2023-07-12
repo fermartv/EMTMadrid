@@ -7,7 +7,7 @@ import logging
 import pytest
 
 from emt_madrid import EMTAPIWrapper
-from tests.conftest import MockAsyncSession
+from tests.conftest import MockAsyncSession, check_stop_info
 
 
 @pytest.mark.asyncio
@@ -24,6 +24,14 @@ async def concurrent_calls(
         stop_info = emt_api.get_stop_info()
         assert stop_info is not None
         assert mock_session.call_count == call_count
+        if (
+            email == "email"
+            and password == "password"
+            and stop_id == "72"
+            and status == 200
+            and exception is None
+        ):
+            check_stop_info(stop_info=stop_info, distance=2, arrivals=2)
 
 
 async def run_concurrent_calls(

@@ -6,7 +6,7 @@ import logging
 import pytest
 
 from emt_madrid import EMTAPIWrapper
-from tests.conftest import PRE_LOADED_STOP_INFO, MockAsyncSession
+from tests.conftest import PRE_LOADED_STOP_INFO, MockAsyncSession, check_stop_info
 
 
 @pytest.mark.parametrize(
@@ -69,18 +69,7 @@ async def test_parse_stop(
             )
             assert len(stop_info.get("stop_coordinates")) == 2
 
-            lines = stop_info.get("lines")
-            assert len(lines) == 12
-            line = lines.get("27")
-            assert line.get("destination") == "PLAZA CASTILLA"
-            assert line.get("origin") == "EMBAJADORES"
-            assert line.get("max_freq") == 11
-            assert line.get("min_freq") == 3
-            assert line.get("start_time") == "05:35"
-            assert line.get("end_time") == "00:01"
-            assert line.get("day_type") == "LA"
-            assert len(line.get("distance")) == 0
-            assert len(line.get("arrivals")) == 0
+            check_stop_info(stop_info)
 
 
 @pytest.mark.parametrize(

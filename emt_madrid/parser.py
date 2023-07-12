@@ -2,8 +2,7 @@
 
 import logging
 import math
-from typing import Any, Dict, Optional
-
+from typing import Any, Dict, List, Optional
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -16,7 +15,7 @@ class InvalidToken(Exception):
     """Exception to indicate when the user token is invalid."""
 
 
-def parse_token(response: Dict[str, Any]) -> str:
+def parse_token(response: Dict[str, Any]) -> Optional[str]:
     """Parse the response from the authentication endpoint."""
     if response.get("code") == "01":
         return response["data"][0].get("accessToken")
@@ -56,21 +55,23 @@ def parse_stop_info(
         return {"error": "Invalid token"}
 
 
-def parse_lines(lines: Dict[str, Any]) -> Dict[str, Any]:
+def parse_lines(lines: List[Dict[str, Any]]) -> Dict[str, Any]:
     """Parse the line info from the API response."""
-    line_info = {}
+    line_info: Dict[str, Any] = {}
     for line in lines:
-        line_number = line["label"]
+        line_number = str(line.get("label"))
         line_info[line_number] = {
-            "destination": line["headerA"]
-            if line["direction"] == "A"
-            else line["headerB"],
-            "origin": line["headerA"] if line["direction"] == "B" else line["headerB"],
-            "max_freq": int(line["maxFreq"]),
-            "min_freq": int(line["minFreq"]),
-            "start_time": line["startTime"],
-            "end_time": line["stopTime"],
-            "day_type": line["dayType"],
+            "destination": line.get("headerA")
+            if line.get("direction") == "A"
+            else line.get("headerB"),
+            "origin": line.get("headerA")
+            if line.get("direction") == "B"
+            else line.get("headerB"),
+            "max_freq": int(line.get("maxFreq") or 0),
+            "min_freq": int(line.get("minFreq") or 0),
+            "start_time": line.get("startTime"),
+            "end_time": line.get("stopTime"),
+            "day_type": line.get("dayType"),
             "distance": [],
             "arrivals": [],
         }
@@ -82,7 +83,7 @@ def parse_arrivals(
 ) -> Optional[Dict[str, Any]]:
     """Parse the arrival times and distance from the API response."""
     try:
-        if response.get("code") == "80" and "token" in response.get("description"):
+        if response.get("code") == "80" and "token" in str(response.get("description")):
             raise InvalidToken
         if response.get("code") == "80":
             raise BusStopDisabled

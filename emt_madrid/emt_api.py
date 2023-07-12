@@ -3,14 +3,14 @@
 import asyncio
 import json
 import logging
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 import aiohttp
 import async_timeout
 from aiohttp import ClientError
 
 from .const import BASE_URL, DEFAULT_TIMEOUT
-from .parser import parse_token, parse_stop_info, parse_arrivals
+from .parser import parse_arrivals, parse_stop_info, parse_token
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -45,12 +45,12 @@ class EMTAPIWrapper:
         assert password is not None, "Password must not be None"
         assert session is not None, "Session must not be None"
 
-        self._session = session
-        self._credentials = {"email": email, "password": password}
-        self._stop_id = stop_id
-        self._token = None
-        self._base_url = BASE_URL
-        self._stop_info = {
+        self._session: aiohttp.ClientSession = session
+        self._credentials: Dict[str, Any] = {"email": email, "password": password}
+        self._stop_id: str = stop_id
+        self._token: Optional[str] = None
+        self._base_url: str = BASE_URL
+        self._stop_info: Dict[str, Any] = {
             "stop_id": self._stop_id,
             "stop_name": None,
             "stop_coordinates": None,
@@ -63,14 +63,14 @@ class EMTAPIWrapper:
     async def _get_data(
         self,
         url: str,
-        headers: Dict[str, str],
+        headers: Dict[str, Any],
         method: str,
-        data: Dict[str, Any] = None,
-    ) -> Dict[str, Any]:
+        data: Optional[Dict[str, Any]] = None,
+    ) -> Optional[Dict[str, Any]]:
         """Get data from the EMT API."""
         assert self._session is not None
         if data is not None:
-            data = json.dumps(data)
+            data_json = json.dumps(data)
 
         try:
             if method == "GET":
@@ -79,7 +79,7 @@ class EMTAPIWrapper:
                 )
             elif method == "POST":
                 response = await self._session.post(
-                    url, headers=headers, data=data, timeout=DEFAULT_TIMEOUT
+                    url, headers=headers, data=data_json, timeout=DEFAULT_TIMEOUT
                 )
 
             if response.status == 200:
@@ -97,7 +97,7 @@ class EMTAPIWrapper:
 
         return None
 
-    async def authenticate(self) -> str:
+    async def authenticate(self) -> None:
         """Perform login to obtain the authentication token."""
         endpoint = "v1/mobilitylabs/user/login/"
         email = self._credentials.get("email")
@@ -116,11 +116,11 @@ class EMTAPIWrapper:
             _LOGGER.warning("Timeout error fetching data from %s", url)
 
     @property
-    def token(self) -> str:
+    def token(self) -> Optional[str]:
         """Return API token."""
         return self._token
 
-    async def update_stop_info(self) -> Dict[str, Any]:
+    async def update_stop_info(self) -> None:
         """Update information about a bus stop."""
         endpoint = f"v1/transport/busemtmad/stops/{self._stop_id}/detail/"
         headers = {"accessToken": self._token}
@@ -148,7 +148,7 @@ class EMTAPIWrapper:
         except asyncio.TimeoutError:
             _LOGGER.warning("Timeout error fetching data from %s", url)
 
-    async def update_bus_arrivals(self) -> Dict[str, Any]:
+    async def update_bus_arrivals(self) -> None:
         """Get the next buses for a given bus stop."""
         endpoint = f"v2/transport/busemtmad/stops/{self._stop_id}/arrives/"
         headers = {"accessToken": self._token}
