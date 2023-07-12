@@ -120,6 +120,10 @@ class EMTAPIWrapper:
         """Return API token."""
         return self._token
 
+    def set_token(self, token: str) -> None:
+        """Set the API token."""
+        self._token = token
+
     async def update_stop_info(self) -> None:
         """Update information about a bus stop."""
         endpoint = f"v1/transport/busemtmad/stops/{self._stop_id}/detail/"

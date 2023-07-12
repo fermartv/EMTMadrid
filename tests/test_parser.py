@@ -47,16 +47,14 @@ async def test_parse_token(
     ),
 )
 @pytest.mark.asyncio
-async def test_parse_stop(
-    token, stop_id, num_log_msgs, caplog, mocker
-):  # pylint: disable=too-many-arguments
+async def test_parse_stop(token, stop_id, num_log_msgs, caplog):
     """Test parse_stop and parse_lines functions."""
     mock_session = MockAsyncSession()
     with caplog.at_level(logging.WARNING):
         emt_api = EMTAPIWrapper(
             session=mock_session, email="email", password="password", stop_id=stop_id
         )
-        mocker.patch.object(emt_api, "_token", new=token)
+        emt_api.set_token(token)
         await emt_api.update_stop_info()
         stop_info = emt_api.get_stop_info()
         assert len(caplog.messages) == num_log_msgs
@@ -96,7 +94,7 @@ async def test_parse_arrivals(
         emt_api = EMTAPIWrapper(
             session=mock_session, email="email", password="password", stop_id=stop_id
         )
-        mocker.patch.object(emt_api, "_token", new=token)
+        emt_api.set_token(token)
         if stop_info != {}:
             mocker.patch.object(emt_api, "_stop_info", new=stop_info)
         await emt_api.update_bus_arrivals()

@@ -48,7 +48,7 @@ async def test_authenticate(status, exception, num_log_msgs, caplog):
 )
 @pytest.mark.asyncio
 async def test_update_stop_info(
-    token, status, exception, num_log_msgs, call_count, caplog, mocker
+    token, status, exception, num_log_msgs, call_count, caplog
 ):  # pylint: disable=too-many-arguments
     """Test update_stop_info method."""
     mock_session = MockAsyncSession(status=status, exc=exception)
@@ -56,7 +56,7 @@ async def test_update_stop_info(
         emt_api = EMTAPIWrapper(
             session=mock_session, email="email", password="password", stop_id="72"
         )
-        mocker.patch.object(emt_api, "_token", new=token)
+        emt_api.set_token(token)
         await emt_api.update_stop_info()
         assert len(caplog.messages) == num_log_msgs
         assert mock_session.call_count == call_count
@@ -85,6 +85,7 @@ async def test_update_bus_arrivals(
         emt_api = EMTAPIWrapper(
             session=mock_session, email="email", password="password", stop_id="72"
         )
+        emt_api.set_token(token)
         mocker.patch.object(emt_api, "_token", new=token)
         if stop_info != {}:
             mocker.patch.object(emt_api, "_stop_info", new=stop_info)
