@@ -15,11 +15,15 @@ from .parser import parse_arrivals, parse_stop_info, parse_token
 _LOGGER = logging.getLogger(__name__)
 
 
-class EMTAPIWrapper:
-    """Wrapper class for the EMT API.
+class EMTAPIAuthenticator:
+    """
+    Authenticates the user and obtains a token for accessing the EMT API.
 
-    Provides methods to interact with the EMT API,
-    including authentication and accessing endpoint data.
+    Args:
+        session (aiohttp.ClientSession): An instance of `aiohttp.ClientSession`
+            for making HTTP requests.
+        email (str): The user's email address.
+        password (str): The user's password.
     """
 
     def __init__(
@@ -27,28 +31,96 @@ class EMTAPIWrapper:
         session: aiohttp.ClientSession,
         email: str,
         password: str,
-        stop_id: str,
     ) -> None:
-        """Initialize the EMTAPIWrapper object.
-
-        Args:
-            session (aiohttp.ClientSession): The aiohttp ClientSession
-                for making HTTP requests.
-            email (str): The email for API login.
-            password (str): The password for API login.
-            stop_id (str): The ID of the bus stop.
-
-        Raises:
-            AssertionError: If email, password, or session is None.
-        """
+        """Initialize the EMTAPIAuthenticator object."""
         assert email is not None, "Email must not be None"
         assert password is not None, "Password must not be None"
         assert session is not None, "Session must not be None"
 
         self._session: aiohttp.ClientSession = session
         self._credentials: Dict[str, Any] = {"email": email, "password": password}
-        self._stop_id: str = stop_id
         self._token: Optional[str] = None
+        self._base_url: str = BASE_URL
+
+    async def _get_data(
+        self,
+        url: str,
+        headers: Dict[str, Any],
+    ) -> Optional[Dict[str, Any]]:
+        """Get data from the EMT API."""
+        assert self._session is not None
+
+        try:
+            response = await self._session.get(
+                url, headers=headers, timeout=DEFAULT_TIMEOUT
+            )
+
+            if response.status == 200:
+                return await response.json()
+
+            _LOGGER.warning(
+                "Error %s. Failed to get data from %s", response.status, url
+            )
+
+        except TimeoutError:
+            _LOGGER.warning("Timeout error fetching data from %s", url)
+
+        except ClientError as exc:
+            _LOGGER.warning("Client error in '%s' -> %s", url, exc)
+
+        return None
+
+    async def authenticate(self) -> Optional[str]:
+        """Perform login to obtain the authentication token."""
+        endpoint = "v1/mobilitylabs/user/login/"
+        email = self._credentials.get("email")
+        password = self._credentials.get("password")
+        headers = {"email": email, "password": password}
+        url = self._base_url + endpoint
+
+        try:
+            async with async_timeout.timeout(DEFAULT_TIMEOUT):
+                response = await self._get_data(url, headers)
+
+            if response is not None:
+                self._token = parse_token(response)
+                return self._token
+
+        except asyncio.TimeoutError:
+            _LOGGER.warning("Timeout error fetching data from %s", url)
+        return None
+
+    @property
+    def token(self) -> Optional[str]:
+        """Return API token."""
+        return self._token
+
+
+class EMTAPIBusStop:
+    """
+    Represents a bus stop in the EMT (Empresa Municipal de Transportes) API.
+
+    Args:
+        session (aiohttp.ClientSession): An instance of `aiohttp.ClientSession`
+            for making HTTP requests.
+        token (str): The API token for accessing the EMT API.
+        stop_id (str): The ID of the bus stop.
+    """
+
+    def __init__(
+        self,
+        session: aiohttp.ClientSession,
+        token: str,
+        stop_id: str,
+    ) -> None:
+        """Initialize the EMTAPIBusStop object."""
+        assert session is not None, "Session must not be None"
+        if token is None:
+            _LOGGER.warning("Token must not be None")
+
+        self._session: aiohttp.ClientSession = session
+        self._stop_id: str = stop_id
+        self._token: str = token
         self._base_url: str = BASE_URL
         self._stop_info: Dict[str, Any] = {
             "stop_id": self._stop_id,
@@ -71,6 +143,9 @@ class EMTAPIWrapper:
         assert self._session is not None
         if data is not None:
             data_json = json.dumps(data)
+
+        if self._token is None:
+            return None
 
         try:
             if method == "GET":
@@ -97,32 +172,14 @@ class EMTAPIWrapper:
 
         return None
 
-    async def authenticate(self) -> None:
-        """Perform login to obtain the authentication token."""
-        endpoint = "v1/mobilitylabs/user/login/"
-        email = self._credentials.get("email")
-        password = self._credentials.get("password")
-        headers = {"email": email, "password": password}
-        url = self._base_url + endpoint
-
-        try:
-            async with async_timeout.timeout(DEFAULT_TIMEOUT):
-                response = await self._get_data(url, headers, "GET")
-
-            if response is not None:
-                self._token = parse_token(response)
-
-        except asyncio.TimeoutError:
-            _LOGGER.warning("Timeout error fetching data from %s", url)
-
-    @property
-    def token(self) -> Optional[str]:
-        """Return API token."""
-        return self._token
-
     def set_token(self, token: str) -> None:
         """Set the API token."""
         self._token = token
+
+    @property
+    def token(self) -> str:
+        """Return API token."""
+        return self._token
 
     async def update_stop_info(self) -> None:
         """Update information about a bus stop."""
@@ -143,7 +200,6 @@ class EMTAPIWrapper:
                 return None
 
             if parsed_stop_info.get("error") == "Invalid token":
-                await self.authenticate()
                 return None
 
             async with self._update_semaphore:
@@ -180,7 +236,6 @@ class EMTAPIWrapper:
                 return None
 
             if parsed_arrivals.get("error") == "Invalid token":
-                await self.authenticate()
                 return None
 
             async with self._update_semaphore:

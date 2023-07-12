@@ -7,7 +7,7 @@ import logging
 import pytest
 from aiohttp import ClientError
 
-from emt_madrid import EMTAPIWrapper
+from emt_madrid import EMTAPIAuthenticator, EMTAPIBusStop
 from tests.conftest import PRE_LOADED_STOP_INFO, MockAsyncSession
 
 
@@ -26,8 +26,8 @@ async def test_authenticate(status, exception, num_log_msgs, caplog):
     """Test authentication method."""
     mock_session = MockAsyncSession(status=status, exc=exception)
     with caplog.at_level(logging.WARNING):
-        emt_api = EMTAPIWrapper(
-            session=mock_session, email="email", password="password", stop_id="test"
+        emt_api = EMTAPIAuthenticator(
+            session=mock_session, email="email", password="password"
         )
         await emt_api.authenticate()
         assert len(caplog.messages) == num_log_msgs
@@ -38,8 +38,7 @@ async def test_authenticate(status, exception, num_log_msgs, caplog):
     "token, status, exception, num_log_msgs, call_count",
     (
         ("token", 200, None, 0, 1),
-        (None, 200, None, 1, 2),
-        ("invalid_token", 200, None, 1, 2),
+        ("invalid_token", 200, None, 1, 1),
         ("token", 500, None, 1, 1),
         ("token", 200, asyncio.TimeoutError, 1, 1),
         ("token", 200, TimeoutError, 1, 1),
@@ -53,10 +52,7 @@ async def test_update_stop_info(
     """Test update_stop_info method."""
     mock_session = MockAsyncSession(status=status, exc=exception)
     with caplog.at_level(logging.WARNING):
-        emt_api = EMTAPIWrapper(
-            session=mock_session, email="email", password="password", stop_id="72"
-        )
-        emt_api.set_token(token)
+        emt_api = EMTAPIBusStop(session=mock_session, token=token, stop_id="72")
         await emt_api.update_stop_info()
         assert len(caplog.messages) == num_log_msgs
         assert mock_session.call_count == call_count
@@ -67,8 +63,10 @@ async def test_update_stop_info(
     (
         ("token", {}, 200, None, 0, 2),
         ("token", PRE_LOADED_STOP_INFO, 200, None, 0, 1),
-        ("invalid_token", PRE_LOADED_STOP_INFO, 200, None, 1, 2),
-        ("invalid_token", {}, 200, None, 1, 3),
+        ("invalid_token", PRE_LOADED_STOP_INFO, 200, None, 1, 1),
+        ("invalid_token", {}, 200, None, 1, 2),
+        (None, PRE_LOADED_STOP_INFO, 200, None, 1, 0),
+        (None, {}, 200, None, 1, 0),
         ("token", {}, 500, None, 1, 1),
         ("token", {}, 200, asyncio.TimeoutError, 1, 1),
         ("token", {}, 200, TimeoutError, 1, 1),
@@ -82,13 +80,23 @@ async def test_update_bus_arrivals(
     """Test update_bus_arrivals method."""
     mock_session = MockAsyncSession(status=status, exc=exception)
     with caplog.at_level(logging.WARNING):
-        emt_api = EMTAPIWrapper(
-            session=mock_session, email="email", password="password", stop_id="72"
+        emt_api_bus_stop = EMTAPIBusStop(
+            session=mock_session, token=token, stop_id="72"
         )
-        emt_api.set_token(token)
-        mocker.patch.object(emt_api, "_token", new=token)
         if stop_info != {}:
-            mocker.patch.object(emt_api, "_stop_info", new=stop_info)
-        await emt_api.update_bus_arrivals()
+            mocker.patch.object(emt_api_bus_stop, "_stop_info", new=stop_info)
+        await emt_api_bus_stop.update_bus_arrivals()
         assert len(caplog.messages) == num_log_msgs
         assert mock_session.call_count == call_count
+
+
+@pytest.mark.asyncio
+async def test_set_token():
+    """Test update_bus_arrivals method."""
+    mock_session = MockAsyncSession()
+    emt_api_bus_stop = EMTAPIBusStop(
+        session=mock_session, token="old_token", stop_id="72"
+    )
+    assert emt_api_bus_stop.token == "old_token"
+    emt_api_bus_stop.set_token("new_token")
+    assert emt_api_bus_stop.token == "new_token"
