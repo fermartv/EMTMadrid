@@ -6,7 +6,14 @@ import logging
 import pytest
 
 from emt_madrid import EMTAPIAuthenticator, EMTAPIBusStop
-from tests.conftest import PRE_LOADED_STOP_INFO, MockAsyncSession, check_stop_info
+from tests.conftest import (
+    _FIXTURE_STOP_INFO,
+    MockAsyncSession,
+    check_stop_info,
+    load_fixture,
+)
+
+PRE_LOADED_STOP_INFO = load_fixture(_FIXTURE_STOP_INFO)
 
 
 @pytest.mark.parametrize(

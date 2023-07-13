@@ -1,0 +1,140 @@
+{
+  "stop_id": "72",
+  "stop_name": "Cibeles-Casa de América",
+  "stop_coordinates": [-3.69214452424823, 40.4203613685499],
+  "stop_address": "Pº de Recoletos, 2 (Pza. de Cibeles)",
+  "lines": {
+    "5": {
+      "destination": "CHAMARTIN",
+      "origin": "SOL/SEVILLA",
+      "max_freq": 19,
+      "min_freq": 12,
+      "start_time": "06:30",
+      "end_time": "00:04",
+      "day_type": "LA",
+      "distance": [621, 3753],
+      "arrivals": [8, 21]
+    },
+    "14": {
+      "destination": "PIO XII",
+      "origin": "CONDE DE CASAL",
+      "max_freq": 15,
+      "min_freq": 7,
+      "start_time": "06:20",
+      "end_time": "23:36",
+      "day_type": "LA",
+      "distance": [1316, 3094],
+      "arrivals": [7, 18]
+    },
+    "27": {
+      "destination": "PLAZA CASTILLA",
+      "origin": "EMBAJADORES",
+      "max_freq": 11,
+      "min_freq": 3,
+      "start_time": "05:35",
+      "end_time": "00:01",
+      "day_type": "LA",
+      "distance": [25, 955],
+      "arrivals": [0, 4]
+    },
+    "37": {
+      "destination": "CUATRO CAMINOS",
+      "origin": "PUENTE VALLECAS",
+      "max_freq": 20,
+      "min_freq": 13,
+      "start_time": "06:00",
+      "end_time": "23:30",
+      "day_type": "LA",
+      "distance": [2270, 3579],
+      "arrivals": [11, 23]
+    },
+    "45": {
+      "destination": "REINA VICTORIA",
+      "origin": "LEGAZPI",
+      "max_freq": 23,
+      "min_freq": 9,
+      "start_time": "05:30",
+      "end_time": "23:34",
+      "day_type": "LA",
+      "distance": [1063, 3029],
+      "arrivals": [4, 13]
+    },
+    "53": {
+      "destination": "ARTURO SORIA",
+      "origin": "SOL/SEVILLA",
+      "max_freq": 27,
+      "min_freq": 11,
+      "start_time": "05:50",
+      "end_time": "00:06",
+      "day_type": "LA",
+      "distance": [727, 744],
+      "arrivals": [3, 15]
+    },
+    "150": {
+      "destination": "VIRGEN CORTIJO",
+      "origin": "SOL/SEVILLA",
+      "max_freq": 24,
+      "min_freq": 9,
+      "start_time": "05:55",
+      "end_time": "00:12",
+      "day_type": "LA",
+      "distance": [669, 3104],
+      "arrivals": [8, 18]
+    },
+    "C03": {
+      "destination": "ARGÜELLES",
+      "origin": "PUERTA TOLEDO",
+      "max_freq": 22,
+      "min_freq": 12,
+      "start_time": "07:00",
+      "end_time": "23:37",
+      "day_type": "LA",
+      "distance": [2086],
+      "arrivals": [9]
+    },
+    "N22": {
+      "destination": "BARRIO DEL PILAR",
+      "origin": "CIBELES",
+      "max_freq": 60,
+      "min_freq": 35,
+      "start_time": "23:40",
+      "end_time": "05:50",
+      "day_type": "LA",
+      "distance": [],
+      "arrivals": []
+    },
+    "N24": {
+      "destination": "LAS TABLAS",
+      "origin": "CIBELES",
+      "max_freq": 60,
+      "min_freq": 35,
+      "start_time": "23:40",
+      "end_time": "05:50",
+      "day_type": "LA",
+      "distance": [],
+      "arrivals": []
+    },
+    "N25": {
+      "destination": "ALONSO MARTINEZ",
+      "origin": "VILLA VALLECAS",
+      "max_freq": 60,
+      "min_freq": 35,
+      "start_time": "00:00",
+      "end_time": "05:10",
+      "day_type": "LA",
+      "distance": [],
+      "arrivals": []
+    },
+    "N26": {
+      "destination": "ALONSO MARTINEZ",
+      "origin": "ALUCHE",
+      "max_freq": 60,
+      "min_freq": 35,
+      "start_time": "00:00",
+      "end_time": "05:10",
+      "day_type": "LA",
+      "distance": [],
+      "arrivals": []
+    }
+  }
+}

@@ -15,19 +15,7 @@ _FIXTURE_STOP_DETAIL_INVALID_TOKEN = "STOP_DETAIL_INVALID_TOKEN.json"
 _FIXTURE_STOP_ARRIVAL_OK = "STOP_ARRIVAL_OK.json"
 _FIXTURE_STOP_ARRIVAL_INVALID_STOP = "STOP_ARRIVAL_INVALID_STOP.json"
 _FIXTURE_STOP_ARRIVAL_INVALID_TOKEN = "STOP_ARRIVAL_INVALID_TOKEN.json"
-
-PRE_LOADED_STOP_INFO: Dict[str, Any] = {
-    "lines": {
-        "27": {
-            "distance": [],
-            "arrivals": [],
-        },
-        "53": {
-            "distance": [],
-            "arrivals": [],
-        },
-    },
-}
+_FIXTURE_STOP_INFO = "STOP_INFO.json"
 
 
 class MockAsyncSession:

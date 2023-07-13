@@ -8,7 +8,9 @@ import pytest
 from aiohttp import ClientError
 
 from emt_madrid import EMTAPIAuthenticator, EMTAPIBusStop
-from tests.conftest import PRE_LOADED_STOP_INFO, MockAsyncSession
+from tests.conftest import _FIXTURE_STOP_INFO, MockAsyncSession, load_fixture
+
+PRE_LOADED_STOP_INFO = load_fixture(_FIXTURE_STOP_INFO)
 
 
 @pytest.mark.parametrize(
@@ -92,7 +94,7 @@ async def test_update_bus_arrivals(
 
 @pytest.mark.asyncio
 async def test_set_token():
-    """Test update_bus_arrivals method."""
+    """Test set_token method."""
     mock_session = MockAsyncSession()
     emt_api_bus_stop = EMTAPIBusStop(
         session=mock_session, token="old_token", stop_id="72"
@@ -100,3 +102,28 @@ async def test_set_token():
     assert emt_api_bus_stop.token == "old_token"
     emt_api_bus_stop.set_token("new_token")
     assert emt_api_bus_stop.token == "new_token"
+
+
+@pytest.mark.parametrize(
+    "stop_info, line, num_log_msgs",
+    (
+        (PRE_LOADED_STOP_INFO, "27", 0),
+        (PRE_LOADED_STOP_INFO, "C03", 0),
+        ({}, "27", 1),
+        (PRE_LOADED_STOP_INFO, "invalid_line", 1),
+    ),
+)
+@pytest.mark.asyncio
+async def test_get_arrival_time(
+    stop_info, line, num_log_msgs, caplog, mocker
+):  # pylint: disable=too-many-arguments
+    """Test get_arrival_time method."""
+    mock_session = MockAsyncSession()
+    with caplog.at_level(logging.WARNING):
+        emt_api_bus_stop = EMTAPIBusStop(
+            session=mock_session, token="token", stop_id="72"
+        )
+        if stop_info != {}:
+            mocker.patch.object(emt_api_bus_stop, "_stop_info", new=stop_info)
+        emt_api_bus_stop.get_arrival_time(line)
+        assert len(caplog.messages) == num_log_msgs

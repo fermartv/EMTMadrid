@@ -229,21 +229,6 @@
           "estimateArrive": 1412,
           "DistanceBus": 3579,
           "positionTypeBus": "0"
-        },
-        {
-          "line": "C03",
-          "stop": "72",
-          "isHead": "False",
-          "destination": "ARGÜELLES",
-          "deviation": 0,
-          "bus": 125,
-          "geometry": {
-            "type": "Point",
-            "coordinates": [-3.706338982202395, 40.40563190511163]
-          },
-          "estimateArrive": 1522,
-          "DistanceBus": 3811,
-          "positionTypeBus": "0"
         }
       ],
       "StopInfo": [],

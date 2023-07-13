@@ -3,7 +3,7 @@
 import asyncio
 import json
 import logging
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 import aiohttp
 import async_timeout
@@ -247,3 +247,13 @@ class EMTAPIBusStop:
     def get_stop_info(self) -> Dict[str, Any]:
         """Return the stop information."""
         return self._stop_info
+
+    def get_arrival_time(self, line: str) -> Optional[List[Optional[int]]]:
+        """Retrieve arrival times in minutes for the specified bus line."""
+        arrivals = self._stop_info.get("lines", {}).get(line, {}).get("arrivals")
+        if arrivals is None:
+            _LOGGER.warning("Unable to get arrival time for line %s", line)
+            return None
+        while len(arrivals) < 2:
+            arrivals.append(None)
+        return arrivals
