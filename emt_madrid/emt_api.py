@@ -257,3 +257,15 @@ class EMTAPIBusStop:
         while len(arrivals) < 2:
             arrivals.append(None)
         return arrivals
+
+    def get_line_info(self, line: str) -> Optional[Dict[str, Any]]:
+        """Retrieve the information for a specific line."""
+        lines = self._stop_info.get("lines", {})
+        if line in lines:
+            line_info = lines.get(line)
+            if "distance" in line_info and len(line_info["distance"]) == 0:
+                line_info["distance"].append(None)
+            return line_info
+
+        _LOGGER.warning("Bus line %s not found", line)
+        return None

@@ -109,14 +109,13 @@ async def test_set_token():
     (
         (PRE_LOADED_STOP_INFO, "27", 0),
         (PRE_LOADED_STOP_INFO, "C03", 0),
+        (PRE_LOADED_STOP_INFO, "N25", 0),
         ({}, "27", 1),
         (PRE_LOADED_STOP_INFO, "invalid_line", 1),
     ),
 )
 @pytest.mark.asyncio
-async def test_get_arrival_time(
-    stop_info, line, num_log_msgs, caplog, mocker
-):  # pylint: disable=too-many-arguments
+async def test_get_arrival_time(stop_info, line, num_log_msgs, caplog, mocker):
     """Test get_arrival_time method."""
     mock_session = MockAsyncSession()
     with caplog.at_level(logging.WARNING):
@@ -126,4 +125,28 @@ async def test_get_arrival_time(
         if stop_info != {}:
             mocker.patch.object(emt_api_bus_stop, "_stop_info", new=stop_info)
         emt_api_bus_stop.get_arrival_time(line)
+        assert len(caplog.messages) == num_log_msgs
+
+
+@pytest.mark.parametrize(
+    "stop_info, line, num_log_msgs",
+    (
+        (PRE_LOADED_STOP_INFO, "27", 0),
+        (PRE_LOADED_STOP_INFO, "C03", 0),
+        (PRE_LOADED_STOP_INFO, "N25", 0),
+        ({}, "27", 1),
+        (PRE_LOADED_STOP_INFO, "invalid_line", 1),
+    ),
+)
+@pytest.mark.asyncio
+async def test_get_line_info(stop_info, line, num_log_msgs, caplog, mocker):
+    """Test get_line_info method."""
+    mock_session = MockAsyncSession()
+    with caplog.at_level(logging.WARNING):
+        emt_api_bus_stop = EMTAPIBusStop(
+            session=mock_session, token="token", stop_id="72"
+        )
+        if stop_info != {}:
+            mocker.patch.object(emt_api_bus_stop, "_stop_info", new=stop_info)
+        emt_api_bus_stop.get_line_info(line)
         assert len(caplog.messages) == num_log_msgs
