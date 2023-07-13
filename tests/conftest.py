@@ -15,6 +15,7 @@ _FIXTURE_STOP_DETAIL_INVALID_TOKEN = "STOP_DETAIL_INVALID_TOKEN.json"
 _FIXTURE_STOP_ARRIVAL_OK = "STOP_ARRIVAL_OK.json"
 _FIXTURE_STOP_ARRIVAL_INVALID_STOP = "STOP_ARRIVAL_INVALID_STOP.json"
 _FIXTURE_STOP_ARRIVAL_INVALID_TOKEN = "STOP_ARRIVAL_INVALID_TOKEN.json"
+_FIXTURE_API_LIMIT = "API_LIMIT.json"
 _FIXTURE_STOP_INFO = "STOP_INFO.json"
 
 
@@ -57,6 +58,8 @@ class MockAsyncSession:
                 self._raw_response = load_fixture(_FIXTURE_LOGIN_INVALID_USER)
             elif headers["password"] == "invalid_password":
                 self._raw_response = load_fixture(_FIXTURE_LOGIN_INVALID_PASSWORD)
+            elif headers["password"] == "api_limit":
+                self._raw_response = load_fixture(_FIXTURE_API_LIMIT)
             else:
                 self._raw_response = load_fixture(_FIXTURE_LOGIN_OK)
 
@@ -67,6 +70,8 @@ class MockAsyncSession:
                 or headers["accessToken"] is None
             ):
                 self._raw_response = load_fixture(_FIXTURE_STOP_DETAIL_INVALID_TOKEN)
+            elif headers["accessToken"] == "api_limit":
+                self._raw_response = load_fixture(_FIXTURE_API_LIMIT)
             elif stop_id in ("invalid_stop_id", "None"):
                 self._raw_response = load_fixture(_FIXTURE_STOP_DETAIL_INVALID_STOP)
             else:
@@ -81,6 +86,8 @@ class MockAsyncSession:
         if "stops" in url and "arrives" in url:
             if headers["accessToken"] == "invalid_token":
                 self._raw_response = load_fixture(_FIXTURE_STOP_ARRIVAL_INVALID_TOKEN)
+            elif headers["accessToken"] == "api_limit":
+                self._raw_response = load_fixture(_FIXTURE_API_LIMIT)
             elif url.split("/")[-3] == "invalid_stop_id":
                 self._raw_response = load_fixture(_FIXTURE_STOP_ARRIVAL_INVALID_STOP)
             else:

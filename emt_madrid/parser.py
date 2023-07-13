@@ -15,12 +15,23 @@ class InvalidToken(Exception):
     """Exception to indicate when the user token is invalid."""
 
 
+class APILimitReached(Exception):
+    """Exception to indicate when maximum number of API calls has been reached."""
+
+
 def parse_token(response: Dict[str, Any]) -> Optional[str]:
     """Parse the response from the authentication endpoint."""
-    if response.get("code") == "01":
-        return response["data"][0].get("accessToken")
+    try:
+        if response.get("code") == "01":
+            return response["data"][0].get("accessToken")
+        if response.get("code") == "98":
+            raise APILimitReached
 
-    _LOGGER.warning("Invalid login credentials")
+        _LOGGER.warning("Invalid login credentials")
+
+    except APILimitReached:
+        _LOGGER.warning("Maximum daily API usage has been exceeded.")
+
     return None
 
 
@@ -34,6 +45,8 @@ def parse_stop_info(
             raise BusStopDisabled
         if response.get("code") == "80":
             raise InvalidToken
+        if response.get("code") == "98":
+            raise APILimitReached
 
         response_stop = response["data"][0]["stops"][0]
         stop_info.update(
@@ -53,6 +66,9 @@ def parse_stop_info(
     except InvalidToken:
         _LOGGER.warning("Invalid or expired token")
         return {"error": "Invalid token"}
+    except APILimitReached:
+        _LOGGER.warning("Maximum daily API usage has been exceeded.")
+        return None
 
 
 def parse_lines(lines: List[Dict[str, Any]]) -> Dict[str, Any]:
@@ -87,6 +103,8 @@ def parse_arrivals(
             raise InvalidToken
         if response.get("code") == "80":
             raise BusStopDisabled
+        if response.get("code") == "98":
+            raise APILimitReached
 
         for line_info in stop_info["lines"].values():
             line_info["arrivals"] = []
@@ -107,3 +125,6 @@ def parse_arrivals(
     except InvalidToken:
         _LOGGER.warning("Invalid or expired token")
         return {"error": "Invalid token"}
+    except APILimitReached:
+        _LOGGER.warning("Maximum daily API usage has been exceeded.")
+        return None

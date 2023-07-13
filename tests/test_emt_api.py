@@ -41,6 +41,7 @@ async def test_authenticate(status, exception, num_log_msgs, caplog):
     (
         ("token", 200, None, 0, 1),
         ("invalid_token", 200, None, 1, 1),
+        ("api_limit", 200, None, 1, 1),
         ("token", 500, None, 1, 1),
         ("token", 200, asyncio.TimeoutError, 1, 1),
         ("token", 200, TimeoutError, 1, 1),
@@ -65,6 +66,8 @@ async def test_update_stop_info(
     (
         ("token", {}, 200, None, 0, 2),
         ("token", PRE_LOADED_STOP_INFO, 200, None, 0, 1),
+        ("api_limit", {}, 200, None, 1, 2),
+        ("api_limit", PRE_LOADED_STOP_INFO, 200, None, 1, 1),
         ("invalid_token", PRE_LOADED_STOP_INFO, 200, None, 1, 1),
         ("invalid_token", {}, 200, None, 1, 2),
         (None, PRE_LOADED_STOP_INFO, 200, None, 1, 0),

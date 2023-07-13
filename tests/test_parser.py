@@ -20,6 +20,7 @@ PRE_LOADED_STOP_INFO = load_fixture(_FIXTURE_STOP_INFO)
     "email, password, num_log_msgs",
     (
         ("email", "password", 0),
+        ("email", "api_limit", 1),
         ("invalid_email", "password", 1),
         ("email", "invalid_password", 1),
     ),
@@ -45,6 +46,7 @@ async def test_parse_token(
     "token, stop_id, num_log_msgs",
     (
         ("token", "72", 0),
+        ("api_limit", "72", 1),
         ("token", "invalid_stop_id", 1),
         ("invalid_token", "72", 1),
         ("invalid_token", "invalid_stop_id", 1),
@@ -81,6 +83,8 @@ async def test_parse_stop(token, stop_id, num_log_msgs, caplog):
     (
         ("token", "72", {}, 0),
         ("token", "72", PRE_LOADED_STOP_INFO, 0),
+        ("api_limit", "72", {}, 1),
+        ("api_limit", "72", PRE_LOADED_STOP_INFO, 1),
         ("token", "invalid_stop_id", PRE_LOADED_STOP_INFO, 1),
         ("token", "invalid_stop_id", {}, 1),
         ("invalid_token", "72", {}, 1),
