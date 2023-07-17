@@ -41,11 +41,12 @@ def parse_stop_info(
     """Parse the stop info from the API response."""
     assert stop_info is not None
     try:
-        if response.get("code") == "90":
+        response_code = response.get("code")
+        if response_code in ("90", "81"):
             raise BusStopDisabled
-        if response.get("code") == "80":
+        if response_code == "80":
             raise InvalidToken
-        if response.get("code") == "98":
+        if response_code == "98":
             raise APILimitReached
 
         response_stop = response["data"][0]["stops"][0]
