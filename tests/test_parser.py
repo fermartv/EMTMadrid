@@ -79,6 +79,36 @@ async def test_parse_stop(token, stop_id, num_log_msgs, caplog):
 
 
 @pytest.mark.parametrize(
+    "token, stop_id, num_log_msgs",
+    (
+        ("token", "stop_not_found", 0),
+        ("api_limit", "stop_not_found", 1),
+    ),
+)
+@pytest.mark.asyncio
+async def test_parse_stop_alternative__method(token, stop_id, num_log_msgs, caplog):
+    """Test parse_stop and parse_lines functions when using the alternative method."""
+    mock_session = MockAsyncSession()
+    with caplog.at_level(logging.WARNING):
+        emt_api_bus_stop = EMTAPIBusStop(
+            session=mock_session, token=token, stop_id=stop_id
+        )
+        await emt_api_bus_stop.update_stop_info()
+        stop_info = emt_api_bus_stop.get_stop_info()
+        assert len(caplog.messages) == num_log_msgs
+        if token == "token" and stop_id == "stop_not_found":
+            assert stop_info is not None
+            assert stop_info.get("stop_id") == "4490"
+            assert stop_info.get("stop_name") == "Camino de Santiago-Valcarlos"
+            assert (
+                stop_info.get("stop_address") == "Valcarlos con Av. Camino de Santiago"
+            )
+            assert len(stop_info.get("stop_coordinates")) == 2
+
+            check_stop_info(stop_info, code="81")
+
+
+@pytest.mark.parametrize(
     "token, stop_id, stop_info, num_log_msgs",
     (
         ("token", "72", {}, 0),

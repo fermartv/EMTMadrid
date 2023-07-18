@@ -62,6 +62,29 @@ async def test_update_stop_info(
 
 
 @pytest.mark.parametrize(
+    "token, stop_id, status, exception, num_log_msgs, call_count",
+    (
+        ("token", "stop_not_found", 200, None, 0, 2),
+        ("api_limit", "stop_not_found", 200, None, 1, 2),
+        ("token", "stop_not_found", 200, asyncio.TimeoutError, 1, 2),
+        ("token", "stop_not_found", 200, TimeoutError, 1, 2),
+        ("token", "stop_not_found", 200, ClientError, 1, 2),
+    ),
+)
+@pytest.mark.asyncio
+async def test_update_stop_info_alternative_method(
+    token, stop_id, status, exception, num_log_msgs, call_count, caplog
+):  # pylint: disable=too-many-arguments
+    """Test update_stop_info method."""
+    mock_session = MockAsyncSession(status=status, exc=exception)
+    with caplog.at_level(logging.WARNING):
+        emt_api = EMTAPIBusStop(session=mock_session, token=token, stop_id=stop_id)
+        await emt_api.update_stop_info()
+        assert len(caplog.messages) == num_log_msgs
+        assert mock_session.call_count == call_count
+
+
+@pytest.mark.parametrize(
     "token, stop_info, status, exception, num_log_msgs, call_count",
     (
         ("token", {}, 200, None, 0, 2),

@@ -42,56 +42,83 @@ def parse_stop_info(
     assert stop_info is not None
     try:
         response_code = response.get("code")
-        if response_code in ("90", "81"):
+        if response_code == "90":
             raise BusStopDisabled
         if response_code == "80":
             raise InvalidToken
         if response_code == "98":
             raise APILimitReached
 
-        response_stop = response["data"][0]["stops"][0]
-        stop_info.update(
-            {
-                "stop_id": response_stop["stop"],
-                "stop_name": response_stop["name"],
-                "stop_coordinates": response_stop["geometry"]["coordinates"],
-                "stop_address": response_stop["postalAddress"],
-                "lines": parse_lines(response_stop["dataLine"]),
-            }
-        )
+        if "stopName" in response["data"][0]:
+            response_stop = response["data"][0]
+            stop_info.update(
+                {
+                    "stop_id": str(response_stop["stopId"]),
+                    "stop_name": response_stop["stopName"].rstrip(),
+                    "stop_coordinates": response_stop["geometry"]["coordinates"],
+                    "stop_address": response_stop["address"].rstrip(),
+                    "lines": parse_lines(response_stop["lines"], "basic"),
+                }
+            )
+
+        else:
+            response_stop = response["data"][0]["stops"][0]
+            stop_info.update(
+                {
+                    "stop_id": response_stop["stop"],
+                    "stop_name": response_stop["name"].rstrip(),
+                    "stop_coordinates": response_stop["geometry"]["coordinates"],
+                    "stop_address": response_stop["postalAddress"].rstrip(),
+                    "lines": parse_lines(response_stop["dataLine"], "full"),
+                }
+            )
         return stop_info
 
     except BusStopDisabled:
         _LOGGER.warning("Bus Stop disabled or does not exist")
-        return None
+        return {"error": "Bus Stop disabled", "error_code": response.get("code")}
     except InvalidToken:
         _LOGGER.warning("Invalid or expired token")
-        return {"error": "Invalid token"}
+        return {"error": "Invalid token", "error_code": response.get("code")}
     except APILimitReached:
         _LOGGER.warning("Maximum daily API usage has been exceeded.")
-        return None
+        return {
+            "error": "Maximum daily API usage reached",
+            "error_code": response.get("code"),
+        }
 
 
-def parse_lines(lines: List[Dict[str, Any]]) -> Dict[str, Any]:
+def parse_lines(lines: List[Dict[str, Any]], mode: str) -> Dict[str, Any]:
     """Parse the line info from the API response."""
     line_info: Dict[str, Any] = {}
-    for line in lines:
-        line_number = str(line.get("label"))
-        line_info[line_number] = {
-            "destination": line.get("headerA")
-            if line.get("direction") == "A"
-            else line.get("headerB"),
-            "origin": line.get("headerA")
-            if line.get("direction") == "B"
-            else line.get("headerB"),
-            "max_freq": int(line.get("maxFreq") or 0),
-            "min_freq": int(line.get("minFreq") or 0),
-            "start_time": line.get("startTime"),
-            "end_time": line.get("stopTime"),
-            "day_type": line.get("dayType"),
-            "distance": [],
-            "arrivals": [],
-        }
+    if mode == "full":
+        for line in lines:
+            line_number = str(line.get("label"))
+            line_info[line_number] = {
+                "destination": line.get("headerA")
+                if line.get("direction") == "A"
+                else line.get("headerB"),
+                "origin": line.get("headerA")
+                if line.get("direction") == "B"
+                else line.get("headerB"),
+                "max_freq": int(line.get("maxFreq") or 0),
+                "min_freq": int(line.get("minFreq") or 0),
+                "start_time": line.get("startTime"),
+                "end_time": line.get("stopTime"),
+                "day_type": line.get("dayType"),
+                "distance": [],
+                "arrivals": [],
+            }
+    elif mode == "basic":
+        line_info = {}
+        for line in lines:
+            line_number = line["label"]
+            line_info[line_number] = {
+                "destination": line["nameA"] if line["to"] == "A" else line["nameB"],
+                "origin": line["nameA"] if line["to"] == "B" else line["nameB"],
+                "distance": [],
+                "arrivals": [],
+            }
     return line_info
 
 

@@ -181,9 +181,9 @@ class EMTAPIBusStop:
         """Return API token."""
         return self._token
 
-    async def update_stop_info(self) -> None:
-        """Update information about a bus stop."""
-        endpoint = f"v1/transport/busemtmad/stops/{self._stop_id}/detail/"
+    async def _update_stop_info_around_stop(self) -> Optional[Dict[str, Any]]:
+        """Update information about a bus stop using the stops around stop endpoint."""
+        endpoint = f"v2/transport/busemtmad/stops/arroundstop/{self._stop_id}/0/"
         headers = {"accessToken": self._token}
         url = self._base_url + endpoint
 
@@ -196,10 +196,35 @@ class EMTAPIBusStop:
 
             parsed_stop_info = parse_stop_info(response, self._stop_info)
 
+            return parsed_stop_info
+
+        except asyncio.TimeoutError:
+            _LOGGER.warning("Timeout error fetching data from %s", url)
+            return None
+
+    async def update_stop_info(self) -> None:
+        """Update information about a bus stop."""
+        endpoint = f"v1/transport/busemtmad/stops/{self._stop_id}/detail/"
+        headers = {"accessToken": self._token}
+        url = self._base_url + endpoint
+
+        try:
+            async with async_timeout.timeout(DEFAULT_TIMEOUT):
+                response = await self._get_data(url, headers, "GET")
+
+            if response is None:
+                return None
+            print(response)
+
+            if response.get("code", {}) == "81":
+                parsed_stop_info = await self._update_stop_info_around_stop()
+            else:
+                parsed_stop_info = parse_stop_info(response, self._stop_info)
+
             if parsed_stop_info is None:
                 return None
 
-            if parsed_stop_info.get("error") == "Invalid token":
+            if parsed_stop_info.get("error", None) is not None:
                 return None
 
             async with self._update_semaphore:
