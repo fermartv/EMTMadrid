@@ -214,7 +214,6 @@ class EMTAPIBusStop:
 
             if response is None:
                 return None
-            print(response)
 
             if response.get("code", {}) == "81":
                 parsed_stop_info = await self._update_stop_info_around_stop()
