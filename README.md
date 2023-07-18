@@ -7,7 +7,7 @@ Python wrapper for the Madrid EMT (Empresa Municipal de Transportes) API, provid
 Install the package using pip:
 
 ```bash
-pip install madrid-emt
+pip install emt-madrid
 ```
 
 ## Authentication Instructions
