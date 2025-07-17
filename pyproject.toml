@@ -1,23 +1,31 @@
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling >= 1.26"]
 build-backend = "hatchling.build"
 
 [project]
 name = "emt_madrid"
-version = "0.0.3"
+version = "1.0.0"
 description = "Python wrapper for the Madrid EMT (Empresa Municipal de Transportes) API"
 readme = "README.md"
-requires-python = ">=3.7"
-dependencies = [
-    "aiohttp >= 3.8.4",
-    "async-timeout >= 4.0.2"
-]
+requires-python = ">=3.13.2"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
     "Operating System :: OS Independent",
 ]
+dependencies = [
+    "aiohttp>=3.10.11",
+]
 
 [project.urls]
 "Homepage" = "https://github.com/fermartv/EMTMadrid"
 "Bug Tracker" = "https://github.com/fermartv/EMTMadrid/issues"
+
+[dependency-groups]
+dev = [
+    "pytest-asyncio>=0.24.0",
+    "pytest-cov>=6.2.1",
+    "python-dotenv>=1.1.1",
+    "ruff>=0.12.3",
+    "ty>=0.0.1a14",
+]
