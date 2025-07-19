@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "emt_madrid"
-version = "1.0.0"
+version = "1.0.1"
 description = "Python wrapper for the Madrid EMT (Empresa Municipal de Transportes) API"
 readme = "README.md"
 requires-python = ">=3.13.2"
