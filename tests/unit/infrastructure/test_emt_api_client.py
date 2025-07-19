@@ -40,7 +40,7 @@ class TestEMTAuthenticatedClient:
         http_client = FakeHTTPClient(LOGIN_OK_RESPONSE)
         emt_authenticated_client = EMTAuthenticatedClient(http_client, CREDENTIALS)  # type: ignore
 
-        await emt_authenticated_client.authenticate()
+        await emt_authenticated_client._authenticate()
 
         assert (
             emt_authenticated_client._token.token
@@ -57,7 +57,7 @@ class TestEMTAuthenticatedClient:
         emt_authenticated_client = EMTAuthenticatedClient(http_client, CREDENTIALS)  # type: ignore
 
         with pytest.raises(AuthenticationError):
-            await emt_authenticated_client.authenticate()
+            await emt_authenticated_client._authenticate()
 
     @pytest.mark.asyncio
     async def test_authenticate_invalid_password(self):
@@ -66,7 +66,7 @@ class TestEMTAuthenticatedClient:
         emt_authenticated_client = EMTAuthenticatedClient(http_client, CREDENTIALS)  # type: ignore
 
         with pytest.raises(AuthenticationError):
-            await emt_authenticated_client.authenticate()
+            await emt_authenticated_client._authenticate()
 
     @pytest.mark.asyncio
     async def test_authenticate_api_limit_exceeded(self):
@@ -75,7 +75,7 @@ class TestEMTAuthenticatedClient:
         emt_authenticated_client = EMTAuthenticatedClient(http_client, CREDENTIALS)
 
         with pytest.raises(AuthenticationError):
-            await emt_authenticated_client.authenticate()
+            await emt_authenticated_client._authenticate()
 
     @pytest.mark.asyncio
     async def test_exchange_success(self) -> None:
@@ -84,7 +84,7 @@ class TestEMTAuthenticatedClient:
         emt_authenticated_client = EMTAuthenticatedClient(
             login_http_client, CREDENTIALS
         )
-        await emt_authenticated_client.authenticate()
+        await emt_authenticated_client._authenticate()
 
         # Reset and configure the mock for the exchange call
         login_http_client.exchange.reset_mock()
@@ -106,7 +106,7 @@ class TestEMTAuthenticatedClient:
         )
 
         auth_mock = AsyncMock()
-        emt_authenticated_client.authenticate = auth_mock  # type: ignore[method-assign]
+        emt_authenticated_client._authenticate = auth_mock  # type: ignore[method-assign]
 
         login_http_client.exchange.side_effect = [  # type: ignore[attr-defined]
             LOGIN_EXPIRED_TOKEN_RESPONSE,
@@ -124,10 +124,10 @@ class TestEMTAuthenticatedClient:
         emt_authenticated_client = EMTAuthenticatedClient(
             login_http_client, CREDENTIALS
         )
-        await emt_authenticated_client.authenticate()
+        await emt_authenticated_client._authenticate()
 
         mock_authenticate = AsyncMock()
-        emt_authenticated_client.authenticate = mock_authenticate  # type: ignore[method-assign]
+        emt_authenticated_client._authenticate = mock_authenticate  # type: ignore[method-assign]
 
         mock_exchange = AsyncMock(return_value=LOGIN_OK_RESPONSE)
         login_http_client.exchange = mock_exchange  # type: ignore[method-assign]

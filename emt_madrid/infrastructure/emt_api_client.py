@@ -74,7 +74,7 @@ class EMTAuthenticatedClient:
         self._credentials: Credentials = credentials
         self._token: Token = Token()
 
-    async def authenticate(self) -> None:
+    async def _authenticate(self) -> None:
         """Authenticate with the EMT API using stored credentials.
 
         This method updates the authentication token by making a login request
@@ -146,6 +146,6 @@ class EMTAuthenticatedClient:
             Exception: For other unexpected errors during the request
         """
         if self._token.is_expired or self._token.token is None:
-            await self.authenticate()
+            await self._authenticate()
         headers = {"accessToken": self._token.token}
         return await self._http_client.exchange(method, endpoint, params, data, headers)
