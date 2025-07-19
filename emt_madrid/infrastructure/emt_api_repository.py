@@ -2,11 +2,15 @@ from datetime import time
 
 from emt_madrid.domain.day_type import DayType
 from emt_madrid.domain.emt_repository import EMTRepository
+from emt_madrid.domain.exceptions import (
+    APIResponseError,
+    StopNotFoundError,
+    ArrivalsNotFoundError,
+)
 from emt_madrid.domain.line import Line
 from emt_madrid.domain.stop import Stop
 from emt_madrid.infrastructure.emt_api_client import EMTAuthenticatedClient
 from emt_madrid.infrastructure.emt_api_endpoints import Stops
-from emt_madrid.domain.exceptions import StopNotFoundError, APIResponseError
 
 
 class EMTAPIRepository(EMTRepository):
@@ -35,7 +39,7 @@ class EMTAPIRepository(EMTRepository):
             )
 
             if not response:
-                raise StopNotFoundError(f"No information found for stop {stop_id}")
+                raise APIResponseError(f"No response from stop: {stop_id}")
 
             if (
                 response.get("code", {})
@@ -49,7 +53,8 @@ class EMTAPIRepository(EMTRepository):
 
             if not stops_data:
                 raise StopNotFoundError(
-                    f"No nearby stops found for stop {stop_id}. Code: {response.get('code')}"
+                    stop_id=stop_id,
+                    message=f"No nearby stops found for stop {stop_id}. Code: {response.get('code')}",
                 )
 
             stop_data = stops_data[0]
@@ -68,9 +73,7 @@ class EMTAPIRepository(EMTRepository):
             )
 
         except Exception as e:
-            raise APIResponseError(
-                f"Failed to retrieve nearby stops for stop {stop_id}"
-            ) from e
+            raise StopNotFoundError(stop_id, str(e)) from e
 
     def _get_lines_from_around_stop(self, lines: list[dict]) -> list[Line]:
         """Get a list of lines from the around stop endpoint response."""
@@ -110,11 +113,11 @@ class EMTAPIRepository(EMTRepository):
             )
 
             if not response:
-                raise StopNotFoundError(f"No information found for stop {stop_id}")
+                raise APIResponseError(f"No response from stop: {stop_id}")
 
             if response.get("code", {}) == Stops.DETAIL["responses"]["stop_not_found"]:
                 raise StopNotFoundError(
-                    f"Stop {stop_id} not found. Code: {response.get('code')}"
+                    message=f"Stop {stop_id} not found. Code: {response.get('code')}"
                 )
 
             if (
@@ -126,7 +129,7 @@ class EMTAPIRepository(EMTRepository):
             stops_data = response.get("data", [])
 
             if not stops_data:
-                raise StopNotFoundError(
+                raise APIResponseError(
                     f"No information found for stop {stop_id}. Code: {response.get('code')}"
                 )
 
@@ -147,9 +150,7 @@ class EMTAPIRepository(EMTRepository):
             )
 
         except Exception as e:
-            raise APIResponseError(
-                f"Failed to retrieve information for stop {stop_id}"
-            ) from e
+            raise StopNotFoundError(stop_id, str(e)) from e
 
     def _get_lines_from_stop(self, lines: list[dict]) -> list[Line]:
         """Get a list of lines from the stop endpoint response."""
@@ -185,7 +186,7 @@ class EMTAPIRepository(EMTRepository):
             The same Stop object with updated arrival information for each line
 
         Raises:
-            StopNotFoundError: If the arrival information cannot be retrieved
+            ArrivalsNotFoundError: If the arrival information cannot be retrieved
         """
         try:
             endpoint = Stops.ARRIVAL["endpoint"].format(stop_id=stop.stop_id)
@@ -196,16 +197,20 @@ class EMTAPIRepository(EMTRepository):
             )
 
             if not response:
-                raise ValueError(f"No information found for stop {stop.stop_id}")
+                raise APIResponseError(f"No response from stop: {stop.stop_id}")
 
             if response.get("code") == Stops.ARRIVAL["responses"]["stop_not_found"]:
-                raise StopNotFoundError(f"Stop {stop.stop_id} not found")
+                raise StopNotFoundError(
+                    stop_id=stop.stop_id,
+                    message=f"No nearby stops found for stop {stop.stop_id}. Code: {response.get('code')}",
+                )
 
             arrivals_data = response.get("data", [{}])[0].get("Arrive", [])
 
             if not arrivals_data:
-                raise StopNotFoundError(
-                    f"No arrival information found for stop {stop.stop_id}"
+                raise ArrivalsNotFoundError(
+                    stop_id=stop.stop_id,
+                    message=f"No arrival information found for stop {stop.stop_id}",
                 )
 
             line_arrivals = {}
@@ -237,6 +242,4 @@ class EMTAPIRepository(EMTRepository):
             return stop
 
         except Exception as e:
-            raise APIResponseError(
-                f"Failed to retrieve arrival information for stop {stop.stop_id}: {str(e)}"
-            ) from e
+            raise ArrivalsNotFoundError(stop.stop_id, str(e)) from e

@@ -21,7 +21,7 @@ from tests.unit.infrastructure.fixtures.test_get_arrivals_fixture import (
     STOP_GET_ARRIVALS_NOT_FOUND_RESPONSE,
     STOP_GET_ARRIVALS_NO_DATA_RESPONSE,
 )
-from emt_madrid.domain.exceptions import APIResponseError
+from emt_madrid.domain.exceptions import ArrivalsNotFoundError, StopNotFoundError
 
 
 class FakeEMTAuthenticatedClient:
@@ -53,7 +53,7 @@ class TestStopGetInfo:
         )
         emt_api_repository = EMTAPIRepository(emt_authenticated_client)  # type: ignore
 
-        with pytest.raises(APIResponseError):
+        with pytest.raises(StopNotFoundError):
             await emt_api_repository.get_stop_info(STOP_GET_INFO_OK.stop_id)
 
     @pytest.mark.asyncio
@@ -74,7 +74,7 @@ class TestStopGetInfo:
         emt_authenticated_client = FakeEMTAuthenticatedClient()
         emt_api_repository = EMTAPIRepository(emt_authenticated_client)  # type: ignore
 
-        with pytest.raises(APIResponseError):
+        with pytest.raises(StopNotFoundError):
             await emt_api_repository.get_stop_info(STOP_GET_INFO_OK.stop_id)
 
     @pytest.mark.asyncio
@@ -84,7 +84,7 @@ class TestStopGetInfo:
         )
         emt_api_repository = EMTAPIRepository(emt_authenticated_client)  # type: ignore
 
-        with pytest.raises(APIResponseError):
+        with pytest.raises(StopNotFoundError):
             await emt_api_repository.get_stop_info(STOP_GET_INFO_OK.stop_id)
 
 
@@ -107,7 +107,7 @@ class TestGetNearbyStops:
         )
         emt_api_repository = EMTAPIRepository(emt_authenticated_client)  # type: ignore
 
-        with pytest.raises(APIResponseError):
+        with pytest.raises(StopNotFoundError):
             await emt_api_repository.get_nearby_stops(GET_NEARBY_STOPS_OK.stop_id)
 
     @pytest.mark.asyncio
@@ -115,7 +115,7 @@ class TestGetNearbyStops:
         emt_authenticated_client = FakeEMTAuthenticatedClient()
         emt_api_repository = EMTAPIRepository(emt_authenticated_client)  # type: ignore
 
-        with pytest.raises(APIResponseError):
+        with pytest.raises(StopNotFoundError):
             await emt_api_repository.get_nearby_stops(GET_NEARBY_STOPS_OK.stop_id)
 
     @pytest.mark.asyncio
@@ -125,7 +125,7 @@ class TestGetNearbyStops:
         )
         emt_api_repository = EMTAPIRepository(emt_authenticated_client)  # type: ignore
 
-        with pytest.raises(APIResponseError):
+        with pytest.raises(StopNotFoundError):
             await emt_api_repository.get_nearby_stops(GET_NEARBY_STOPS_OK.stop_id)
 
 
@@ -148,7 +148,7 @@ class TestGetArrivals:
         )
         emt_api_repository = EMTAPIRepository(emt_authenticated_client)  # type: ignore
 
-        with pytest.raises(APIResponseError):
+        with pytest.raises(ArrivalsNotFoundError):
             await emt_api_repository.get_arrivals(STOP_GET_INFO_OK)
 
     @pytest.mark.asyncio
@@ -156,7 +156,7 @@ class TestGetArrivals:
         emt_authenticated_client = FakeEMTAuthenticatedClient()
         emt_api_repository = EMTAPIRepository(emt_authenticated_client)  # type: ignore
 
-        with pytest.raises(APIResponseError):
+        with pytest.raises(ArrivalsNotFoundError):
             await emt_api_repository.get_arrivals(STOP_GET_INFO_OK)
 
     @pytest.mark.asyncio
@@ -166,5 +166,5 @@ class TestGetArrivals:
         )
         emt_api_repository = EMTAPIRepository(emt_authenticated_client)  # type: ignore
 
-        with pytest.raises(APIResponseError):
+        with pytest.raises(ArrivalsNotFoundError):
             await emt_api_repository.get_arrivals(STOP_GET_INFO_OK)
