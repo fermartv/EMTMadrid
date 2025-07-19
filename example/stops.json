@@ -1,0 +1,472 @@
+[
+  {
+    "stop_id": 70,
+    "data": {
+      "stop_id": 70,
+      "stop_name": "Cibeles",
+      "stop_address": "Pza. de Cibeles con Pº del Prado",
+      "stop_coordinates": [
+        -3.69337395070087,
+        40.4191558117028
+      ],
+      "stop_lines": [
+        {
+          "line_number": "1",
+          "origin": "CRISTO REY",
+          "destination": "PROSPERIDAD",
+          "arrival": null,
+          "next_arrival": null,
+          "min_frequency": 14,
+          "max_frequency": 25,
+          "day_type": "Working day"
+        },
+        {
+          "line_number": "2",
+          "origin": "MANUEL BECERRA",
+          "destination": "REINA VICTORIA",
+          "arrival": null,
+          "next_arrival": null,
+          "min_frequency": 10,
+          "max_frequency": 23,
+          "day_type": "Working day"
+        },
+        {
+          "line_number": "9",
+          "origin": "SOL/SEVILLA",
+          "destination": "HORTALEZA",
+          "arrival": null,
+          "next_arrival": null,
+          "min_frequency": 6,
+          "max_frequency": 23,
+          "day_type": "Working day"
+        },
+        {
+          "line_number": "15",
+          "origin": "SOL/SEVILLA",
+          "destination": "LA ELIPA",
+          "arrival": null,
+          "next_arrival": null,
+          "min_frequency": 14,
+          "max_frequency": 22,
+          "day_type": "Working day"
+        },
+        {
+          "line_number": "20",
+          "origin": "SOL/SEVILLA",
+          "destination": "PAVONES",
+          "arrival": null,
+          "next_arrival": null,
+          "min_frequency": 8,
+          "max_frequency": 22,
+          "day_type": "Working day"
+        },
+        {
+          "line_number": "51",
+          "origin": "SOL/SEVILLA",
+          "destination": "PLAZA PERU",
+          "arrival": null,
+          "next_arrival": null,
+          "min_frequency": 12,
+          "max_frequency": 20,
+          "day_type": "Working day"
+        },
+        {
+          "line_number": "52",
+          "origin": "SOL/SEVILLA",
+          "destination": "SANTAMARCA",
+          "arrival": null,
+          "next_arrival": null,
+          "min_frequency": 12,
+          "max_frequency": 24,
+          "day_type": "Working day"
+        },
+        {
+          "line_number": "74",
+          "origin": "PINTOR ROSALES",
+          "destination": "PARQUE AVENIDAS",
+          "arrival": null,
+          "next_arrival": null,
+          "min_frequency": 16,
+          "max_frequency": 30,
+          "day_type": "Working day"
+        },
+        {
+          "line_number": "146",
+          "origin": "CALLAO",
+          "destination": "LOS MOLINOS",
+          "arrival": null,
+          "next_arrival": null,
+          "min_frequency": 9,
+          "max_frequency": 19,
+          "day_type": "Working day"
+        },
+        {
+          "line_number": "N5",
+          "origin": "CIBELES",
+          "destination": "FIN DE SEMANA",
+          "arrival": null,
+          "next_arrival": null,
+          "min_frequency": 35,
+          "max_frequency": 45,
+          "day_type": "Working day"
+        },
+        {
+          "line_number": "N6",
+          "origin": "CIBELES",
+          "destination": "EL CAÑAVERAL",
+          "arrival": null,
+          "next_arrival": null,
+          "min_frequency": 35,
+          "max_frequency": 45,
+          "day_type": "Working day"
+        },
+        {
+          "line_number": "N7",
+          "origin": "CIBELES",
+          "destination": "VALDERRIVAS",
+          "arrival": null,
+          "next_arrival": null,
+          "min_frequency": 35,
+          "max_frequency": 45,
+          "day_type": "Working day"
+        }
+      ]
+    },
+    "error": null
+  },
+  {
+    "stop_id": 71,
+    "data": {
+      "stop_id": 71,
+      "stop_name": "Cibeles",
+      "stop_address": "Pº del Prado, 1 con Plaza de Cibeles",
+      "stop_coordinates": [
+        -3.6926347733348,
+        40.418808882595
+      ],
+      "stop_lines": [
+        {
+          "line_number": "203",
+          "origin": "ESTACION ATOCHA",
+          "destination": "AEROPUERTO",
+          "arrival": null,
+          "next_arrival": null,
+          "min_frequency": 15,
+          "max_frequency": 30,
+          "day_type": "Working day"
+        },
+        {
+          "line_number": "N27",
+          "origin": "CIBELES",
+          "destination": "AEROPUERTO",
+          "arrival": null,
+          "next_arrival": null,
+          "min_frequency": 30,
+          "max_frequency": 35,
+          "day_type": "Working day"
+        }
+      ]
+    },
+    "error": null
+  },
+  {
+    "stop_id": 72,
+    "data": {
+      "stop_id": 72,
+      "stop_name": "Cibeles-Casa de América",
+      "stop_address": "Pº de Recoletos, 2 (Pza. de Cibeles)",
+      "stop_coordinates": [
+        -3.69214452424823,
+        40.4203613685499
+      ],
+      "stop_lines": [
+        {
+          "line_number": "5",
+          "origin": "SOL/SEVILLA",
+          "destination": "CHAMARTIN",
+          "arrival": null,
+          "next_arrival": null,
+          "min_frequency": 12,
+          "max_frequency": 19,
+          "day_type": "Working day"
+        },
+        {
+          "line_number": "14",
+          "origin": "CONDE DE CASAL",
+          "destination": "PIO XII",
+          "arrival": null,
+          "next_arrival": null,
+          "min_frequency": 7,
+          "max_frequency": 15,
+          "day_type": "Working day"
+        },
+        {
+          "line_number": "27",
+          "origin": "EMBAJADORES",
+          "destination": "PLAZA CASTILLA",
+          "arrival": null,
+          "next_arrival": null,
+          "min_frequency": 3,
+          "max_frequency": 13,
+          "day_type": "Working day"
+        },
+        {
+          "line_number": "37",
+          "origin": "CUATRO CAMINOS",
+          "destination": "PUENTE VALLECAS",
+          "arrival": null,
+          "next_arrival": null,
+          "min_frequency": 13,
+          "max_frequency": 20,
+          "day_type": "Working day"
+        },
+        {
+          "line_number": "45",
+          "origin": "LEGAZPI",
+          "destination": "REINA VICTORIA",
+          "arrival": null,
+          "next_arrival": null,
+          "min_frequency": 9,
+          "max_frequency": 23,
+          "day_type": "Working day"
+        },
+        {
+          "line_number": "53",
+          "origin": "SOL/SEVILLA",
+          "destination": "ARTURO SORIA",
+          "arrival": null,
+          "next_arrival": null,
+          "min_frequency": 11,
+          "max_frequency": 25,
+          "day_type": "Working day"
+        },
+        {
+          "line_number": "150",
+          "origin": "SOL/SEVILLA",
+          "destination": "VIRGEN CORTIJO",
+          "arrival": null,
+          "next_arrival": null,
+          "min_frequency": 10,
+          "max_frequency": 25,
+          "day_type": "Working day"
+        },
+        {
+          "line_number": "C03",
+          "origin": "PUERTA TOLEDO",
+          "destination": "ARGÜELLES",
+          "arrival": null,
+          "next_arrival": null,
+          "min_frequency": 15,
+          "max_frequency": 19,
+          "day_type": "Working day"
+        },
+        {
+          "line_number": "N1",
+          "origin": "CIBELES",
+          "destination": "SANCHINARRO",
+          "arrival": null,
+          "next_arrival": null,
+          "min_frequency": 35,
+          "max_frequency": 45,
+          "day_type": "Working day"
+        },
+        {
+          "line_number": "N4",
+          "origin": "CIBELES",
+          "destination": "BARAJAS",
+          "arrival": null,
+          "next_arrival": null,
+          "min_frequency": 35,
+          "max_frequency": 45,
+          "day_type": "Working day"
+        },
+        {
+          "line_number": "N22",
+          "origin": "CIBELES",
+          "destination": "BARRIO DE LA PAZ",
+          "arrival": null,
+          "next_arrival": null,
+          "min_frequency": 35,
+          "max_frequency": 45,
+          "day_type": "Working day"
+        },
+        {
+          "line_number": "N24",
+          "origin": "CIBELES",
+          "destination": "LAS TABLAS",
+          "arrival": null,
+          "next_arrival": null,
+          "min_frequency": 35,
+          "max_frequency": 45,
+          "day_type": "Working day"
+        },
+        {
+          "line_number": "N25",
+          "origin": "ALONSO MARTINEZ",
+          "destination": "VILLA VALLECAS",
+          "arrival": null,
+          "next_arrival": null,
+          "min_frequency": 35,
+          "max_frequency": 45,
+          "day_type": "Working day"
+        },
+        {
+          "line_number": "N26",
+          "origin": "ALONSO MARTINEZ",
+          "destination": "ALUCHE",
+          "arrival": null,
+          "next_arrival": null,
+          "min_frequency": 35,
+          "max_frequency": 45,
+          "day_type": "Working day"
+        }
+      ]
+    },
+    "error": null
+  },
+  {
+    "stop_id": 73,
+    "data": {
+      "stop_id": 73,
+      "stop_name": "Cibeles",
+      "stop_address": "Pº de Recoletos, 1 (Pza. de Cibeles)",
+      "stop_coordinates": [
+        -3.69280593946565,
+        40.4202357914327
+      ],
+      "stop_lines": [
+        {
+          "line_number": "5",
+          "origin": "SOL/SEVILLA",
+          "destination": "CHAMARTIN",
+          "arrival": null,
+          "next_arrival": null,
+          "min_frequency": 12,
+          "max_frequency": 19,
+          "day_type": "Working day"
+        },
+        {
+          "line_number": "14",
+          "origin": "CONDE DE CASAL",
+          "destination": "PIO XII",
+          "arrival": null,
+          "next_arrival": null,
+          "min_frequency": 7,
+          "max_frequency": 15,
+          "day_type": "Working day"
+        },
+        {
+          "line_number": "27",
+          "origin": "EMBAJADORES",
+          "destination": "PLAZA CASTILLA",
+          "arrival": null,
+          "next_arrival": null,
+          "min_frequency": 3,
+          "max_frequency": 13,
+          "day_type": "Working day"
+        },
+        {
+          "line_number": "37",
+          "origin": "CUATRO CAMINOS",
+          "destination": "PUENTE VALLECAS",
+          "arrival": null,
+          "next_arrival": null,
+          "min_frequency": 13,
+          "max_frequency": 20,
+          "day_type": "Working day"
+        },
+        {
+          "line_number": "45",
+          "origin": "LEGAZPI",
+          "destination": "REINA VICTORIA",
+          "arrival": null,
+          "next_arrival": null,
+          "min_frequency": 9,
+          "max_frequency": 23,
+          "day_type": "Working day"
+        },
+        {
+          "line_number": "150",
+          "origin": "SOL/SEVILLA",
+          "destination": "VIRGEN CORTIJO",
+          "arrival": null,
+          "next_arrival": null,
+          "min_frequency": 10,
+          "max_frequency": 25,
+          "day_type": "Working day"
+        },
+        {
+          "line_number": "C03",
+          "origin": "PUERTA TOLEDO",
+          "destination": "ARGÜELLES",
+          "arrival": null,
+          "next_arrival": null,
+          "min_frequency": 15,
+          "max_frequency": 19,
+          "day_type": "Working day"
+        },
+        {
+          "line_number": "N23",
+          "origin": "CIBELES",
+          "destination": "MONTECARMELO",
+          "arrival": null,
+          "next_arrival": null,
+          "min_frequency": 35,
+          "max_frequency": 45,
+          "day_type": "Working day"
+        },
+        {
+          "line_number": "N25",
+          "origin": "ALONSO MARTINEZ",
+          "destination": "VILLA VALLECAS",
+          "arrival": null,
+          "next_arrival": null,
+          "min_frequency": 35,
+          "max_frequency": 45,
+          "day_type": "Working day"
+        },
+        {
+          "line_number": "N26",
+          "origin": "ALONSO MARTINEZ",
+          "destination": "ALUCHE",
+          "arrival": null,
+          "next_arrival": null,
+          "min_frequency": 35,
+          "max_frequency": 45,
+          "day_type": "Working day"
+        }
+      ]
+    },
+    "error": null
+  },
+  {
+    "stop_id": 74,
+    "data": {
+      "stop_id": 74,
+      "stop_name": "Cibeles",
+      "stop_address": "Pza. de Cibeles con Pº del Prado",
+      "stop_coordinates": [
+        -3.69355075314635,
+        40.419082680646
+      ],
+      "stop_lines": [
+        {
+          "line_number": "34",
+          "origin": "CIBELES",
+          "destination": "LAS AGUILAS",
+          "arrival": null,
+          "next_arrival": null,
+          "min_frequency": 6,
+          "max_frequency": 18,
+          "day_type": "Working day"
+        }
+      ]
+    },
+    "error": null
+  },
+  {
+    "stop_id": 75,
+    "data": null,
+    "error": "Failed to retrieve information for stop 75"
+  }
+]

@@ -1,4 +1,7 @@
 """Wrapper for the Madrid EMT (Empresa Municipal de Trasnportes) API."""
-from .emt_api import EMTAPIAuthenticator, EMTAPIBusStop
 
-__all__ = ["EMTAPIAuthenticator", "EMTAPIBusStop"]
+from .main import EMTClient
+from .domain.stop import Stop
+from .domain.line import Line
+
+__all__ = ["EMTClient", "Line", "Stop"]
