@@ -78,3 +78,28 @@ class TestGetStopInfo:
         stop = await get_stop_info.execute()
 
         assert stop.stop_lines == expected_stop.stop_lines
+
+    @pytest.mark.asyncio
+    async def test_get_stop_info_with_bus_arrivals(self) -> None:
+        """Test getting stop info includes bus arrivals."""
+        stop_id = 123
+        bus_arrivals = [
+            TestData().a_bus_arrival(line="1", bus_id=100, destination="Destination A"),
+            TestData().a_bus_arrival(line="2", bus_id=200, destination="Destination B"),
+        ]
+        expected_stop = TestData().a_stop(
+            stop_id=stop_id,
+            line_numbers=["1", "2"],
+            bus_arrivals=bus_arrivals,
+        )
+
+        emt_repository = FakeEMTRepository()
+        emt_repository.get_stop_info = AsyncMock(return_value=expected_stop)  # type: ignore[method-assign]
+
+        get_stop_info = GetStopInfo(emt_repository, stop_id)  # type: ignore
+        stop = await get_stop_info.execute()
+
+        assert stop.bus_arrivals == bus_arrivals
+        assert len(stop.bus_arrivals) == 2
+        assert stop.bus_arrivals[0].bus_id == 100
+        assert stop.bus_arrivals[1].bus_id == 200

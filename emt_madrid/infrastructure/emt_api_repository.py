@@ -1,5 +1,6 @@
 from datetime import time
 
+from emt_madrid.domain.bus_arrival import BusArrival
 from emt_madrid.domain.day_type import DayType
 from emt_madrid.domain.emt_repository import EMTRepository
 from emt_madrid.domain.exceptions import (
@@ -184,6 +185,7 @@ class EMTAPIRepository(EMTRepository):
 
         Returns:
             The same Stop object with updated arrival information for each line
+            and bus arrival information including coordinates
 
         Raises:
             ArrivalsNotFoundError: If the arrival information cannot be retrieved
@@ -213,17 +215,36 @@ class EMTAPIRepository(EMTRepository):
                     message=f"No arrival information found for stop {stop.stop_id}",
                 )
 
+            bus_arrivals = []
             line_arrivals = {}
+
             for arrival in arrivals_data:
                 try:
                     line_number = str(arrival["line"])
+
+                    bus_arrival = BusArrival(
+                        line=line_number,
+                        bus_id=arrival.get("bus", 0),
+                        destination=arrival.get("destination", ""),
+                        coordinates=arrival.get("geometry", {}).get("coordinates", []),
+                        estimate_arrive_sec=arrival.get("estimateArrive"),
+                        distance_bus=arrival.get("DistanceBus"),
+                        is_head=arrival.get("isHead", "False").lower() == "true",
+                        deviation=arrival.get("deviation", 0),
+                        position_type_bus=arrival.get("positionTypeBus", "0"),
+                    )
+                    bus_arrivals.append(bus_arrival)
+
                     if line_number not in line_arrivals:
                         line_arrivals[line_number] = []
-                    line_arrivals[line_number].append(
-                        int(arrival["estimateArrive"]) // 60
-                    )
-                except (KeyError, ValueError):
+                    if arrival.get("estimateArrive") is not None:
+                        line_arrivals[line_number].append(
+                            int(arrival["estimateArrive"]) // 60
+                        )
+                except (KeyError, ValueError, TypeError):
                     continue
+
+            stop.bus_arrivals = bus_arrivals
 
             for line in stop.stop_lines:
                 arrivals = line_arrivals.get(line.line_number, [])
