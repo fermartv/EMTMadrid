@@ -39,3 +39,38 @@ class TestGetArrivals:
 
         with pytest.raises(ValueError, match=error_message):
             await get_arrivals.execute()
+
+    @pytest.mark.asyncio
+    async def test_get_arrivals_with_bus_arrivals(self) -> None:
+        """Test getting arrivals returns stop with bus arrivals."""
+        stop_id = 123
+        bus_arrivals = [
+            TestData().a_bus_arrival(
+                line="1",
+                bus_id=100,
+                destination="Destination A",
+                estimate_arrive_sec=60,
+            ),
+            TestData().a_bus_arrival(
+                line="2",
+                bus_id=200,
+                destination="Destination B",
+                estimate_arrive_sec=120,
+            ),
+        ]
+        expected_stop = TestData().a_stop(
+            stop_id=stop_id,
+            line_numbers=["1", "2"],
+            bus_arrivals=bus_arrivals,
+        )
+
+        emt_repository = FakeEMTRepository()
+        emt_repository.get_arrivals = AsyncMock(return_value=expected_stop)  # type: ignore[method-assign]
+
+        get_arrivals = GetArrivals(emt_repository, stop_id)  # type: ignore
+        stop = await get_arrivals.execute()
+
+        assert stop.bus_arrivals == bus_arrivals
+        assert len(stop.bus_arrivals) == 2
+        assert stop.bus_arrivals[0].estimate_arrive_sec == 60
+        assert stop.bus_arrivals[1].estimate_arrive_sec == 120

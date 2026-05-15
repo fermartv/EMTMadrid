@@ -69,7 +69,7 @@ test-coverage:  ## Run tests.
 
 .PHONY: test-gitflow-actions
 test-gitflow-actions:  ## Test CI actions.
-	act --container-architecture linux/amd64
+	act -W .github/workflows/tests.yml --container-architecture linux/amd64
 
 .PHONY: pre-commit
 pre-commit: pre-requirements checks test test-gitflow-actions

@@ -1,5 +1,6 @@
 from emt_madrid.domain.stop import Stop
 from emt_madrid.domain.line import Line
+from emt_madrid.domain.bus_arrival import BusArrival
 from datetime import time
 from emt_madrid.domain.day_type import DayType
 
@@ -93,6 +94,41 @@ STOP_GET_ARRIVALS_OK = Stop(
             day_type=STOP_LINES[2]["DAY_TYPE"],
             arrival=STOP_LINES[2]["ARRIVAL_MIN"],
             next_arrival=STOP_LINES[2]["NEXT_ARRIVAL_MIN"],
+        ),
+    ],
+    bus_arrivals=[
+        BusArrival(
+            line="5",
+            bus_id=532,
+            destination="CHAMARTIN",
+            coordinates=[-3.692979009005247, 40.41863125675024],
+            estimate_arrive_sec=62,
+            distance_bus=25,
+            is_head=False,
+            deviation=0,
+            position_type_bus="0",
+        ),
+        BusArrival(
+            line="14",
+            bus_id=2060,
+            destination="PIO XII",
+            coordinates=[-3.698281336673952, 40.41700397996393],
+            estimate_arrive_sec=125,
+            distance_bus=727,
+            is_head=False,
+            deviation=0,
+            position_type_bus="0",
+        ),
+        BusArrival(
+            line="5",
+            bus_id=531,
+            destination="CHAMARTIN",
+            coordinates=[-3.691569683861637, 40.408476053298756],
+            estimate_arrive_sec=241,
+            distance_bus=955,
+            is_head=False,
+            deviation=0,
+            position_type_bus="0",
         ),
     ],
 )

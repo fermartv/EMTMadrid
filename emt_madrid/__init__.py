@@ -3,6 +3,7 @@
 from .main import EMTClient
 from .domain.stop import Stop
 from .domain.line import Line
+from .domain.bus_arrival import BusArrival
 from .domain.exceptions import (
     AuthenticationError,
     StopNotFoundError,
@@ -13,6 +14,7 @@ __all__ = [
     "EMTClient",
     "Line",
     "Stop",
+    "BusArrival",
     "AuthenticationError",
     "StopNotFoundError",
     "ArrivalsNotFoundError",

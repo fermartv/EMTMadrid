@@ -102,8 +102,31 @@ make run-example
 ### Available Methods
 
 #### EMTClient
-- `get_arrivals()`: Fetches and updates stop information
+- `get_arrivals()`: Fetches and updates stop information including **bus arrivals with coordinates**
 - `get_stop_info()`: Returns the stop information
+
+### Data Models
+
+#### BusArrival
+Real-time bus arrival information including:
+- `line`: Bus line number
+- `bus_id`: Unique bus identifier
+- `destination`: Bus destination
+- `coordinates`: Bus GPS coordinates `[longitude, latitude]`
+- `estimate_arrive_sec`: Estimated arrival time in seconds
+- `distance_bus`: Distance to stop in meters
+- `is_head`: Whether this is the head bus
+- `deviation`: Route deviation in seconds
+- `position_type_bus`: Bus position type indicator
+
+#### Stop
+Bus stop information including:
+- `stop_id`: Unique stop identifier
+- `stop_name`: Stop name
+- `stop_address`: Stop address
+- `stop_coordinates`: Stop GPS coordinates `[longitude, latitude]`
+- `stop_lines`: List of `Line` objects serving this stop
+- `bus_arrivals`: List of `BusArrival` objects with real-time arrival data and coordinates
 
 ## Development
 
