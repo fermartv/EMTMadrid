@@ -31,10 +31,10 @@ jobs:
       - name: Build package
         run: hatch build
 
-      # - name: Publish to PyPI
-      #   uses: pypa/gh-action-pypi-publish@release/v1
-      #   with:
-      #     password: ${{ secrets.PYPI_API_TOKEN }}
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN }}
 
       - name: Update GitHub Release
         uses: softprops/action-gh-release@v2
